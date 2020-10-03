@@ -1,0 +1,27 @@
+{
+    "files": [
+        "mainwindow.py",
+        "tablemodel.py",
+        "loaddatadialog.py",
+        "texttonumberdialog.py",
+        "discretizedialog.py",
+        "normalizedialog.py",
+        "scaledialog.py",
+        "highlightdialog.py",
+        "chart2ddialog.py",
+        "chart3ddialog.py",
+        "chartcanvas.py",
+        "histogramdialog.py",
+
+        "ui/mainwindow.ui",
+        "ui/loaddatadialog.ui",
+        "ui/texttonumberdialog.ui",
+        "ui/discretizedialog.ui",
+        "ui/scaledialog.ui",
+        "ui/normalizedialog.ui",
+        "ui/highlightdialog.ui",
+        "ui/chart2ddialog.ui",
+        "ui/chart3ddialog.ui",
+        "ui/histogramdialog.ui"
+    ]
+}
