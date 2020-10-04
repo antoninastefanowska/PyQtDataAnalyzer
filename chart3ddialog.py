@@ -34,11 +34,11 @@ class Chart3DDialog(QDialog):
         class_column_name = class_column_name_combobox.currentText()
 
         class_column = self.data[class_column_name]
+        classes = class_column.unique()
         class_dictionary = {}
-        for value in class_column:
-            if value not in class_dictionary:
-                data_part = self.data[class_column == value]
-                class_dictionary[value] = (data_part[x_column_name], data_part[y_column_name], data_part[z_column_name])
+        for value in classes:
+            data_part = self.data[class_column == value]
+            class_dictionary[value] = (data_part[x_column_name], data_part[y_column_name], data_part[z_column_name])
 
         patches = []
         colors = ['pink', 'skyblue', 'lightgreen', 'yellow', 'coral', 'crimson', 'cornflowerblue', 'lightseagreen', 'navy', 'saddlebrown', 'slategray', 'peru', 'darkslategray', 'darkkhaki', 'magenta', 'mediumslateblue']

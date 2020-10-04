@@ -20,15 +20,15 @@ class TextToNumberDialog(QDialog):
 
         alphabetically_radio_button = self.findChild(QRadioButton, "alphabeticallyRadioButton")
 
+        strings = column.unique()
         if alphabetically_radio_button.isChecked():
-            column = column.sort_values()
+            strings.sort()
 
         counter = 0
         dictionary = {}
-        for value in column:
-            if value not in dictionary:
-                counter = counter + 1
-                dictionary[value] = counter
+        for value in strings:
+            counter = counter + 1
+            dictionary[value] = counter
 
         self.data[column_name + "_numer"] = column.map(dictionary)
 
