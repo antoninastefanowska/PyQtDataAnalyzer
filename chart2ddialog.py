@@ -39,7 +39,8 @@ class Chart2DDialog(QDialog):
         patches = []
         colors = ['pink', 'skyblue', 'lightgreen', 'yellow', 'coral', 'crimson', 'cornflowerblue', 'lightseagreen', 'navy', 'saddlebrown', 'slategray', 'peru', 'darkslategray', 'darkkhaki', 'magenta', 'mediumslateblue']
         i = 0
-        for class_key in class_dictionary:
+        classes.sort()
+        for class_key in classes:
             if i < 15:
                 color = colors[i]
             else:
