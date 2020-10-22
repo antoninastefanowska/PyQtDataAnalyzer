@@ -54,9 +54,24 @@
     <addaction name="action3DChart"/>
     <addaction name="actionHistogram"/>
    </widget>
+   <widget class="QMenu" name="menuKlasyfikacja">
+    <property name="title">
+     <string>Klasyfikacja</string>
+    </property>
+    <widget class="QMenu" name="menuTestuj_klasyfikacj">
+     <property name="title">
+      <string>Testuj klasyfikację</string>
+     </property>
+     <addaction name="actionTestKNNMethod"/>
+    </widget>
+    <addaction name="actionKNNMethod"/>
+    <addaction name="separator"/>
+    <addaction name="menuTestuj_klasyfikacj"/>
+   </widget>
    <addaction name="menuPlik"/>
    <addaction name="menuDane"/>
    <addaction name="menuWizualizacja"/>
+   <addaction name="menuKlasyfikacja"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionOpenFile">
@@ -107,6 +122,21 @@
   <action name="actionHighlightEndValues">
    <property name="text">
     <string>Podświetl wartości końcowe</string>
+   </property>
+  </action>
+  <action name="actionKNNMethod">
+   <property name="text">
+    <string>Metoda KNN</string>
+   </property>
+  </action>
+  <action name="actionTestowanie_klasyfikacji">
+   <property name="text">
+    <string>Testowanie klasyfikacji</string>
+   </property>
+  </action>
+  <action name="actionTestKNNMethod">
+   <property name="text">
+    <string>Metoda KNN</string>
    </property>
   </action>
  </widget>
@@ -261,6 +291,22 @@
    <signal>triggered()</signal>
    <receiver>MainWindow</receiver>
    <slot>save_file()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionKNNMethod</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>classify_knn_method()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>

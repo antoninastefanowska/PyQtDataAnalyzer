@@ -40,6 +40,7 @@ class HistogramDialog(QDialog):
         self.chart.hist(column, bins=bar_number)
         self.chart.set_title(column_name)
 
+    @pyqtSlot()
     def accept(self):
         self.generate_histogram()
         super().accept()

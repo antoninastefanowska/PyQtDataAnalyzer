@@ -1,21 +1,27 @@
 import sys
 import os
 from PyQt5 import uic
-from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QTableView
+from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QTableView, QLabel
 from PyQt5.QtCore import pyqtSlot
 
-from tablemodel import TableModel
-from loaddatadialog import LoadDataDialog
-from texttonumberdialog import TextToNumberDialog
-from discretizedialog import DiscretizeDialog
-from normalizedialog import NormalizeDialog
-from scaledialog import ScaleDialog
-from highlightdialog import HighlightDialog
-from chart2ddialog import Chart2DDialog
-from chart3ddialog import Chart3DDialog
-from histogramdialog import HistogramDialog
+from data.tablemodel import TableModel
+from data.loaddatadialog import LoadDataDialog
 
-from chartcanvas import ChartCanvas
+from column.texttonumberdialog import TextToNumberDialog
+from column.discretizedialog import DiscretizeDialog
+from column.normalizedialog import NormalizeDialog
+from column.scaledialog import ScaleDialog
+from column.highlightdialog import HighlightDialog
+
+from visualization.chart2ddialog import Chart2DDialog
+from visualization.chart3ddialog import Chart3DDialog
+from visualization.histogramdialog import HistogramDialog
+from visualization.chartcanvas import ChartCanvas
+
+from classification.knnclassifier import KNNClassifier
+from classification.knnclassifierdialog import KNNClassifierDialog
+from classification.newobjectdialog import NewObjectDialog
+from classification.classificationresultwindow import ClassificationResultWindow
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -108,6 +114,21 @@ class MainWindow(QMainWindow):
             new_window.setWindowTitle("Wykres")
             new_window.setCentralWidget(chart_canvas)
             new_window.show()
+
+    @pyqtSlot()
+    def classify_knn_method(self):
+        dialog = KNNClassifierDialog(self, self.data)
+        if dialog.exec_():
+            class_column_name = dialog.class_column_name
+            metrics = dialog.metrics
+            k_value = dialog.k_value
+            new_object_dialog = NewObjectDialog(self, self.data, class_column_name)
+            if new_object_dialog.exec_():
+                new_object = new_object_dialog.new_object
+                classifier = KNNClassifier(self.data, class_column_name, metrics, k_value)
+                result = classifier.classify(new_object)
+                result_window = ClassificationResultWindow(self, new_object, class_column_name, result)
+                result_window.show()
 
 if __name__ == "__main__":
     app = QApplication([])
