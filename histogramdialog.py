@@ -32,15 +32,12 @@ class HistogramDialog(QDialog):
             max = column.max()
             step = (max - min) / bar_number
 
-            column = column.map(lambda value: math.ceil((value - min) / step))
-            column[column == 0] = 1
+            column = column.map(lambda value: math.ceil((value - min) / step) * step + min)
+            column[column == 0] = min
+        else:
+            bar_number = len(column.unique())
 
-        unique = column.unique()
-        bins = None
-        if not any(isinstance(item, str) for item in unique):
-            bins = range(unique.min(), unique.max() + 2)
-
-        self.chart.hist(column, bins=bins)
+        self.chart.hist(column, bins=bar_number)
         self.chart.set_title(column_name)
 
     def accept(self):
