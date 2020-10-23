@@ -26,6 +26,7 @@ from classification.leaveoneouttester import LeaveOneOutTester
 from classification.precalculateddistance import PrecalculatedDistance
 from classification.testingresultwindow import TestingResultWindow
 from classification.testingworker import TestingWorker
+from classification.progresswindow import ProgressWindow
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -34,6 +35,7 @@ class MainWindow(QMainWindow):
         self.table_model = None
         self.threadpool = QThreadPool()
         self.threadpool.setMaxThreadCount(2)
+        self.progress_window = None
         self.load_ui()
 
     def load_ui(self):
@@ -152,14 +154,18 @@ class MainWindow(QMainWindow):
             worker = TestingWorker(tester, classifier)
             worker.signals.result.connect(self.show_testing_result)
             worker.signals.progress.connect(self.show_progress)
+            self.progress_window = ProgressWindow(self)
+            self.progress_window.show()
             self.threadpool.start(worker)
 
     def show_testing_result(self, result):
         result_window = TestingResultWindow(self, self.data, result)
         result_window.show()
+        self.progress_window.finish()
+        self.progress_window = None
 
     def show_progress(self, progress):
-        print(progress)
+        self.progress_window.update(progress)
 
 if __name__ == "__main__":
     app = QApplication([])

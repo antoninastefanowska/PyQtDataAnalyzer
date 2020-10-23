@@ -31,6 +31,7 @@
         "classification/leaveoneouttester.py",
         "classification/testingresultwindow.py",
         "classification/testingworker.py",
+        "classification/progresswindow.py",
 
         "ui/mainwindow.ui",
         "ui/loaddatadialog.ui",
@@ -45,6 +46,7 @@
         "ui/newobjectdialog.ui",
         "ui/knnclassifierdialog.ui",
         "ui/classificationresultwindow.ui",
-        "ui/testingresultwindow.ui"
+        "ui/testingresultwindow.ui",
+        "ui/progresswindow.ui"
     ]
 }
