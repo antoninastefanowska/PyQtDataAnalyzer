@@ -3,10 +3,10 @@ from PyQt5.QtWidgets import QDialog, QComboBox, QLineEdit
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtGui import QIntValidator
 
-from .euclideandistance import EuclideanDistance
-from .manhattandistance import ManhattanDistance
-from .chebyshevdistance import ChebyshevDistance
-from .mahalanobisdistance import MahalanobisDistance
+from .utils.euclideandistance import EuclideanDistance
+from .utils.manhattandistance import ManhattanDistance
+from .utils.chebyshevdistance import ChebyshevDistance
+from .utils.mahalanobisdistance import MahalanobisDistance
 
 class KNNClassifierDialog(QDialog):
     def __init__(self, parent, data):
@@ -39,7 +39,8 @@ class KNNClassifierDialog(QDialog):
         elif metrics_name == "Czebyszewa":
             self.metrics = ChebyshevDistance()
         elif metrics_name == "Mahalanobisa":
-            self.metrics = MahalanobisDistance(self.data)
+            no_class_data = self.data.drop(self.class_column_name, axis=1)
+            self.metrics = MahalanobisDistance(no_class_data)
 
     @pyqtSlot()
     def accept(self):

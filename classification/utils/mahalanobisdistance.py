@@ -17,7 +17,10 @@ class MahalanobisDistance(DistanceMetrics):
     def calculate_inv_cov_matrix(self, data):
         cov_df = data.cov()
         cov_matrix = cov_df.to_numpy()
-        self.inv_cov_matrix = np.linalg.inv(cov_matrix)
+        try:
+            self.inv_cov_matrix = np.linalg.inv(cov_matrix)
+        except np.linalg.LinAlgError:
+            self.inv_cov_matrix = np.linalg.pinv(cov_matrix)
 
     def get_distance(self, data_object1, data_object2):
         vec1 = data_object1.values

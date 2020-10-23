@@ -18,12 +18,13 @@ from visualization.chart3ddialog import Chart3DDialog
 from visualization.histogramdialog import HistogramDialog
 from visualization.chartcanvas import ChartCanvas
 
-from classification.knnclassifier import KNNClassifier
+from classification.utils.knnclassifier import KNNClassifier
+from classification.utils.leaveoneouttester import LeaveOneOutTester
+from classification.utils.precalculateddistance import PrecalculatedDistance
+
 from classification.knnclassifierdialog import KNNClassifierDialog
 from classification.newobjectdialog import NewObjectDialog
 from classification.classificationresultwindow import ClassificationResultWindow
-from classification.leaveoneouttester import LeaveOneOutTester
-from classification.precalculateddistance import PrecalculatedDistance
 from classification.testingresultwindow import TestingResultWindow
 from classification.testingworker import TestingWorker
 from classification.progresswindow import ProgressWindow
@@ -153,7 +154,8 @@ class MainWindow(QMainWindow):
 
             worker = TestingWorker(tester, classifier)
             worker.signals.result.connect(self.show_testing_result)
-            worker.signals.progress.connect(self.show_progress)
+            worker.signals.progress.connect(self.update_progress)
+            worker.signals.status.connect(self.update_status)
             self.progress_window = ProgressWindow(self)
             self.progress_window.show()
             self.threadpool.start(worker)
@@ -164,8 +166,11 @@ class MainWindow(QMainWindow):
         self.progress_window.finish()
         self.progress_window = None
 
-    def show_progress(self, progress):
+    def update_progress(self, progress):
         self.progress_window.update(progress)
+
+    def update_status(self, status):
+        self.progress_window.update_status(status)
 
 if __name__ == "__main__":
     app = QApplication([])

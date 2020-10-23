@@ -6,9 +6,11 @@ class LeaveOneOutTester(ClassifierTester):
 
     def test_classifier(self, classifier):
         correct = 0
+        self.status_callback("Obliczanie odległości...")
         classifier.prepare()
         n = len(self.data.index)
 
+        self.status_callback("Klasyfikowanie obiektów...")
         for index, test_row in self.data.iterrows():
             classify_data = self.data.drop(index)
             row_no_class = test_row.drop(self.class_column_name)
@@ -18,5 +20,9 @@ class LeaveOneOutTester(ClassifierTester):
             if result == test_row[self.class_column_name]:
                 correct += 1
 
-            self.progress_callback(int(round(index / n * 100)))
+            new_progress = int(round(index / n * 100))
+            if new_progress > self.progress:
+                self.progress = new_progress
+                self.progress_callback(new_progress)
+
         return correct

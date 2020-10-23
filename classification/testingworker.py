@@ -5,6 +5,7 @@ class TestingWorker(QRunnable):
         super().__init__()
         self.tester = tester
         self.tester.set_progress_callback(self.progress_callback)
+        self.tester.set_status_callback(self.status_callback)
         self.classifier = classifier
         self.signals = TestingWorker.TestingSignals()
 
@@ -16,6 +17,10 @@ class TestingWorker(QRunnable):
     def progress_callback(self, progress):
         self.signals.progress.emit(progress)
 
+    def status_callback(self, status):
+        self.signals.status.emit(status)
+
     class TestingSignals(QObject):
         progress = pyqtSignal(int)
+        status = pyqtSignal(str)
         result = pyqtSignal(int)
