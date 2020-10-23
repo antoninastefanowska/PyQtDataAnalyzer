@@ -1,7 +1,5 @@
-import sys
-import os
 from PyQt5 import uic
-from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QTableView, QLabel
+from PyQt5.QtWidgets import QMainWindow, QFileDialog, QTableView, QLabel
 from PyQt5.QtCore import pyqtSlot, QThreadPool
 
 from data.tablemodel import TableModel
@@ -171,9 +169,3 @@ class MainWindow(QMainWindow):
 
     def update_status(self, status):
         self.progress_window.update_status(status)
-
-if __name__ == "__main__":
-    app = QApplication([])
-    widget = MainWindow()
-    widget.show()
-    sys.exit(app.exec_())
