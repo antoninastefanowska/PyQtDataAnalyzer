@@ -318,5 +318,21 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionTestKNNMethod</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>test_knn_method()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
 </ui>

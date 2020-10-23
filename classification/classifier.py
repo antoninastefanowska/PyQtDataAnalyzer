@@ -5,6 +5,12 @@ class Classifier(ABC):
         self.data = data
         self.class_column_name = class_column_name
 
+    def update_data(self, data):
+        self.data = data
+
     @abstractmethod
     def classify(self, data_object):
+        pass
+
+    def prepare(self):
         pass

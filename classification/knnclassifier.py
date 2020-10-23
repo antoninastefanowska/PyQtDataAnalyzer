@@ -1,4 +1,5 @@
 import pandas as pd
+import time
 
 from .classifier import Classifier
 
@@ -7,6 +8,9 @@ class KNNClassifier(Classifier):
         super().__init__(data, class_column_name)
         self.metrics = metrics
         self.k = k
+
+    def prepare(self):
+        self.metrics.prepare()
 
     def classify(self, data_object):
         data_objects = []

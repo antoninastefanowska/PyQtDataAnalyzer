@@ -27,6 +27,10 @@
         "classification/newobjectdialog.py",
         "classification/knnclassifierdialog.py",
         "classification/classificationresultwindow.py",
+        "classification/classifiertester.py",
+        "classification/leaveoneouttester.py",
+        "classification/testingresultwindow.py",
+        "classification/testingworker.py",
 
         "ui/mainwindow.ui",
         "ui/loaddatadialog.ui",
@@ -40,6 +44,7 @@
         "ui/histogramdialog.ui",
         "ui/newobjectdialog.ui",
         "ui/knnclassifierdialog.ui",
-        "ui/classificationresultwindow.ui"
+        "ui/classificationresultwindow.ui",
+        "ui/testingresultwindow.ui"
     ]
 }

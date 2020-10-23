@@ -2,7 +2,7 @@ import sys
 import os
 from PyQt5 import uic
 from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QTableView, QLabel
-from PyQt5.QtCore import pyqtSlot
+from PyQt5.QtCore import pyqtSlot, QThreadPool
 
 from data.tablemodel import TableModel
 from data.loaddatadialog import LoadDataDialog
@@ -22,12 +22,18 @@ from classification.knnclassifier import KNNClassifier
 from classification.knnclassifierdialog import KNNClassifierDialog
 from classification.newobjectdialog import NewObjectDialog
 from classification.classificationresultwindow import ClassificationResultWindow
+from classification.leaveoneouttester import LeaveOneOutTester
+from classification.precalculateddistance import PrecalculatedDistance
+from classification.testingresultwindow import TestingResultWindow
+from classification.testingworker import TestingWorker
 
 class MainWindow(QMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
         self.data = None
         self.table_model = None
+        self.threadpool = QThreadPool()
+        self.threadpool.setMaxThreadCount(2)
         self.load_ui()
 
     def load_ui(self):
@@ -126,9 +132,34 @@ class MainWindow(QMainWindow):
             if new_object_dialog.exec_():
                 new_object = new_object_dialog.new_object
                 classifier = KNNClassifier(self.data, class_column_name, metrics, k_value)
+                classifier.prepare()
                 result = classifier.classify(new_object)
                 result_window = ClassificationResultWindow(self, new_object, class_column_name, result)
                 result_window.show()
+
+    @pyqtSlot()
+    def test_knn_method(self):
+        dialog = KNNClassifierDialog(self, self.data)
+        if dialog.exec_():
+            class_column_name = dialog.class_column_name
+            metrics = dialog.metrics
+            k_value = dialog.k_value
+
+            distances = PrecalculatedDistance(self.data, class_column_name, metrics)
+            classifier = KNNClassifier(self.data, class_column_name, distances, k_value)
+            tester = LeaveOneOutTester(self.data, class_column_name)
+
+            worker = TestingWorker(tester, classifier)
+            worker.signals.result.connect(self.show_testing_result)
+            worker.signals.progress.connect(self.show_progress)
+            self.threadpool.start(worker)
+
+    def show_testing_result(self, result):
+        result_window = TestingResultWindow(self, self.data, result)
+        result_window.show()
+
+    def show_progress(self, progress):
+        print(progress)
 
 if __name__ == "__main__":
     app = QApplication([])

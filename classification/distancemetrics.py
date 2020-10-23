@@ -7,3 +7,9 @@ class DistanceMetrics(ABC):
     @abstractmethod
     def get_distance(self, data_object1, data_object2):
         pass
+
+    def update_data(self, data):
+        pass
+
+    def prepare(self):
+        pass
