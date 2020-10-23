@@ -7,7 +7,7 @@ class PrecalculatedDistance(DistanceMetrics):
         super().__init__()
         self.data = data
         self.metrics = metrics
-        n = self.data.count()
+        n = data.count()
         self.distance_matrix = np.zeros(shape=(n, n))
 
     def calculate_distance_matrix(self):

@@ -1,4 +1,4 @@
-import math
+import numpy as np
 
 from .distancemetrics import DistanceMetrics
 
@@ -13,4 +13,4 @@ class EuclideanDistance(DistanceMetrics):
             value2 = data_object2[column_name]
             if (isinstance(value1, int) or isinstance(value1, float)) and (isinstance(value2, int) or isinstance(value2, float)):
                 sum += (value1 - value2)**2
-        return math.sqrt(sum)
+        return np.sqrt(sum)

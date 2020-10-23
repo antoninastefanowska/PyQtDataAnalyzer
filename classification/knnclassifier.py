@@ -11,7 +11,8 @@ class KNNClassifier(Classifier):
     def classify(self, data_object):
         data_objects = []
         for index, row in self.data.iterrows():
-            distance = self.metrics.get_distance(data_object, row)
+            row_no_class = row.drop(self.class_column_name)
+            distance = self.metrics.get_distance(data_object, row_no_class)
             data_objects.append((row, distance))
         data_objects.sort(key=lambda x: x[1])
         neighbours = data_objects[:self.k]
@@ -22,6 +23,8 @@ class KNNClassifier(Classifier):
             if class_value not in votes:
                 votes[class_value] = 0
             votes[class_value] += 1
+            print(neighbour)
+            print(distance)
 
         max_votes = max(votes.items(), key=lambda x: x[1])
         winner = max_votes[0]
@@ -44,7 +47,7 @@ class KNNClassifier(Classifier):
                         class_distances[class_value] = 0
                     class_distances[class_value] += distance
             min_distance_class = min(class_distances.items(), key=lambda x: x[1])
-            winner = min_distance_class
+            winner = min_distance_class[0]
 
         return winner
 

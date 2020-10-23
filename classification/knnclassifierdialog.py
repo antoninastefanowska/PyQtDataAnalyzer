@@ -39,7 +39,7 @@ class KNNClassifierDialog(QDialog):
         elif metrics_name == "Czebyszewa":
             self.metrics = ChebyshevDistance()
         elif metrics_name == "Mahalanobisa":
-            self.metrics = MahalanobisDistance()
+            self.metrics = MahalanobisDistance(self.data)
 
     @pyqtSlot()
     def accept(self):
