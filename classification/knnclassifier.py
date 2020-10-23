@@ -23,8 +23,6 @@ class KNNClassifier(Classifier):
             if class_value not in votes:
                 votes[class_value] = 0
             votes[class_value] += 1
-            print(neighbour)
-            print(distance)
 
         max_votes = max(votes.items(), key=lambda x: x[1])
         winner = max_votes[0]
