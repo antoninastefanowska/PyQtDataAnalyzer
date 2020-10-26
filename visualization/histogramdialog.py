@@ -26,18 +26,20 @@ class HistogramDialog(QDialog):
 
         if discretize_checkbox.isChecked():
             bar_number_textbox = self.findChild(QLineEdit, "barNumberTextbox")
-            bar_number = int(bar_number_textbox.text())
 
             min = column.min()
             max = column.max()
             step = (max - min) / bar_number
 
             column = column.map(lambda value: math.ceil((value - min) / step) * step + min)
-            column[column == 0] = min
-        else:
-            bar_number = len(column.unique())
+            column = column.drop(column[column == min].index)
 
-        self.chart.hist(column, bins=bar_number)
+        labels = column.unique()
+        values = []
+        for label in labels:
+            values.append(len(column[column == label]))
+
+        self.chart.bar(labels, values, width=((labels.max() - labels.min()) / len(labels)))
         self.chart.set_title(column_name)
 
     @pyqtSlot()

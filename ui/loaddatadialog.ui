@@ -68,7 +68,7 @@
           <item>
            <widget class="QRadioButton" name="irregularRadioButton">
             <property name="text">
-             <string>Nierówne odstępy</string>
+             <string>Odstępy</string>
             </property>
            </widget>
           </item>
