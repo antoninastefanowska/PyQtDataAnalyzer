@@ -1,5 +1,5 @@
 from PyQt5 import uic, QtCore
-from PyQt5.QtWidgets import QMainWindow, QHBoxLayout, QLabel
+from PyQt5.QtWidgets import QMainWindow, QHBoxLayout, QVBoxLayout, QLabel
 
 class ClassificationResultWindow(QMainWindow):
     def __init__(self, parent, data_object, class_column_name, result):
@@ -13,6 +13,7 @@ class ClassificationResultWindow(QMainWindow):
         uic.loadUi("ui/classificationresultwindow.ui", self)
         column_names_layout = self.findChild(QHBoxLayout, "columnNamesLayout")
         column_values_layout = self.findChild(QHBoxLayout, "columnValuesLayout")
+        attributes_layout = self.findChild(QVBoxLayout, "attributesLayout")
         class_column_name_label = self.findChild(QLabel, "classColumnNameLabel")
         result_label = self.findChild(QLabel, "resultLabel")
 
@@ -20,6 +21,7 @@ class ClassificationResultWindow(QMainWindow):
         result_label.setText(str(self.result))
 
         column_names = self.data_object.index
+        i = 0
         for column_name in column_names:
             column_name_label = QLabel()
             column_name_label.setAlignment(QtCore.Qt.AlignCenter)
@@ -33,5 +35,10 @@ class ClassificationResultWindow(QMainWindow):
             column_value_label.setAlignment(QtCore.Qt.AlignCenter)
             column_value_label.setText(str(self.data_object[column_name]))
             column_values_layout.addWidget(column_value_label)
-
-
+            i += 1
+            if i > 20:
+                column_names_layout = QHBoxLayout()
+                column_values_layout = QHBoxLayout()
+                attributes_layout.addLayout(column_names_layout)
+                attributes_layout.addLayout(column_values_layout)
+                i = 0

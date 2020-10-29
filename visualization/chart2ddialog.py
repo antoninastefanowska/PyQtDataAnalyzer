@@ -47,7 +47,7 @@ class Chart2DDialog(QDialog):
                 color = numpy.random.rand(3,)
             self.chart.scatter(class_dictionary[class_key][0], class_dictionary[class_key][1], c=color)
             patches.append(mpatches.Patch(color=color, label=class_key))
-            i = i + 1
+            i += 1
 
         self.chart.set_xlabel(x_column_name)
         self.chart.set_ylabel(y_column_name)

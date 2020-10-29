@@ -30,7 +30,12 @@ class TextToNumberDialog(QDialog):
             counter = counter + 1
             dictionary[value] = counter
 
-        self.data[column_name + "_numer"] = column.map(dictionary)
+        name = column_name + "_numer"
+        i = 2
+        while name in self.data.columns:
+            name = column_name + "_numer_" + str(i)
+            i += 1
+        self.data[name] = column.map(dictionary)
 
     @pyqtSlot()
     def accept(self):

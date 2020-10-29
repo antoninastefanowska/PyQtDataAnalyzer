@@ -15,6 +15,7 @@
         "visualization/chart2ddialog.py",
         "visualization/chart3ddialog.py",
         "visualization/chartcanvas.py",
+        "visualization/chartwindow.py",
         "visualization/histogramdialog.py",
 
         "classification/utils/classifier.py",
@@ -44,6 +45,7 @@
         "ui/highlightdialog.ui",
         "ui/chart2ddialog.ui",
         "ui/chart3ddialog.ui",
+        "ui/chartwindow.ui",
         "ui/histogramdialog.ui",
         "ui/newobjectdialog.ui",
         "ui/knnclassifierdialog.ui",

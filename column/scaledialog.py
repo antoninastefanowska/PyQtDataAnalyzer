@@ -30,7 +30,12 @@ class ScaleDialog(QDialog):
         min = column.min()
         max = column.max()
 
-        self.data[column_name + "_skalowane"] = column.map(lambda value: round((b - a) * (value - min) / (max - min) + a, 2))
+        name = column_name + "_skalowane"
+        i = 2
+        while name in self.data.columns:
+            name = column_name + "_skalowane_" + str(i)
+            i += 1
+        self.data[name] = column.map(lambda value: round((b - a) * (value - min) / (max - min) + a, 4))
 
     @pyqtSlot()
     def accept(self):

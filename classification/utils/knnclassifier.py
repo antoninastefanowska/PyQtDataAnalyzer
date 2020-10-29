@@ -1,6 +1,3 @@
-import pandas as pd
-import time
-
 from .classifier import Classifier
 
 class KNNClassifier(Classifier):

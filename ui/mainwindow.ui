@@ -45,6 +45,7 @@
     <addaction name="actionNormalize"/>
     <addaction name="actionScale"/>
     <addaction name="actionHighlightEndValues"/>
+    <addaction name="actionRemove"/>
    </widget>
    <widget class="QMenu" name="menuWizualizacja">
     <property name="title">
@@ -137,6 +138,11 @@
   <action name="actionTestKNNMethod">
    <property name="text">
     <string>Metoda KNN</string>
+   </property>
+  </action>
+  <action name="actionRemove">
+   <property name="text">
+    <string>Usuń</string>
    </property>
   </action>
  </widget>
@@ -323,6 +329,22 @@
    <signal>triggered()</signal>
    <receiver>MainWindow</receiver>
    <slot>test_knn_method()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionRemove</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>remove()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>

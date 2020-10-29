@@ -26,6 +26,7 @@ class HistogramDialog(QDialog):
 
         if discretize_checkbox.isChecked():
             bar_number_textbox = self.findChild(QLineEdit, "barNumberTextbox")
+            bar_number = int(bar_number_textbox.text())
 
             min = column.min()
             max = column.max()

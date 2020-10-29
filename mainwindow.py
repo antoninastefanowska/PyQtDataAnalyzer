@@ -15,6 +15,7 @@ from visualization.chart2ddialog import Chart2DDialog
 from visualization.chart3ddialog import Chart3DDialog
 from visualization.histogramdialog import HistogramDialog
 from visualization.chartcanvas import ChartCanvas
+from visualization.chartwindow import ChartWindow
 
 from classification.utils.knnclassifier import KNNClassifier
 from classification.utils.leaveoneouttester import LeaveOneOutTester
@@ -90,36 +91,38 @@ class MainWindow(QMainWindow):
             self.table_model.layoutChanged.emit()
 
     @pyqtSlot()
+    def remove(self):
+        table_view = self.findChild(QTableView, "tableView")
+        selected_columns = table_view.selectionModel().selectedColumns()
+        columns = [self.data.columns[index.column()] for index in selected_columns]
+        self.data = self.data.drop(columns, axis='columns')
+        self.table_model.set_data(self.data)
+        self.table_model.layoutChanged.emit()
+
+    @pyqtSlot()
     def show_chart2d(self):
-        chart_canvas = ChartCanvas()
-        chart = chart_canvas.axes
+        chart_canvas = ChartCanvas(subplots=1)
+        chart = chart_canvas.get_subplot(0)
         dialog = Chart2DDialog(self, self.data, chart)
         if dialog.exec_():
-            new_window = QMainWindow(self)
-            new_window.setWindowTitle("Wykres")
-            new_window.setCentralWidget(chart_canvas)
+            new_window = ChartWindow(self, chart_canvas)
             new_window.show()
 
     @pyqtSlot()
     def show_chart3d(self):
-        chart_canvas = ChartCanvas(projection="3d")
-        chart = chart_canvas.axes
+        chart_canvas = ChartCanvas(subplots=1, projection="3d")
+        chart = chart_canvas.get_subplot(0)
         dialog = Chart3DDialog(self, self.data, chart)
         if dialog.exec_():
-            new_window = QMainWindow(self)
-            new_window.setWindowTitle("Wykres")
-            new_window.setCentralWidget(chart_canvas)
+            new_window = ChartWindow(self, chart_canvas)
             new_window.show()
-
     @pyqtSlot()
     def show_histogram(self):
-        chart_canvas = ChartCanvas()
-        chart = chart_canvas.axes
+        chart_canvas = ChartCanvas(subplots=1)
+        chart = chart_canvas.get_subplot(0)
         dialog = HistogramDialog(self, self.data, chart)
         if dialog.exec_():
-            new_window = QMainWindow(self)
-            new_window.setWindowTitle("Wykres")
-            new_window.setCentralWidget(chart_canvas)
+            new_window = ChartWindow(self, chart_canvas)
             new_window.show()
 
     @pyqtSlot()

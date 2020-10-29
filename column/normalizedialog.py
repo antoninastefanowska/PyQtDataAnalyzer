@@ -20,7 +20,12 @@ class NormalizeDialog(QDialog):
         mean = column.mean()
         std = column.std()
 
-        self.data[column_name + "_normalizowane"] = column.map(lambda value: round((value - mean) / std, 2))
+        name = column_name + "_normalizowane"
+        i = 2
+        while name in self.data.columns:
+            name = column_name + "_normalizowane_" + str(i)
+            i += 1
+        self.data[name] = column.map(lambda value: round((value - mean) / std, 4))
 
     @pyqtSlot()
     def accept(self):

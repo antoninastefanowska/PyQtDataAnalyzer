@@ -31,7 +31,12 @@ class DiscretizeDialog(QDialog):
         column = column.map(lambda value: math.ceil((value - min) / step))
         column[column == 0] = 1
 
-        self.data[column_name + "_dyskretne"] = column
+        name = column_name + "_dyskretne"
+        i = 2
+        while name in self.data.columns:
+            name = column_name + "_dyskretne_" + str(i)
+            i += 1
+        self.data[name] = column
 
     @pyqtSlot()
     def accept(self):
