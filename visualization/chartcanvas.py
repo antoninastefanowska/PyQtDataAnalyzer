@@ -20,14 +20,27 @@ class ChartCanvas(FigureCanvasQTAgg):
             rows = 2
             columns = 2
 
+        last_ax = None
         for i in range(1, subplots + 1):
-            ax = self.fig.add_subplot(rows, columns, i, projection=projection)
+            ax = self.fig.add_subplot(rows, columns, i, projection=projection, sharex=last_ax, sharey=last_ax)
             if projection == "3d":
                 ax.mouse_init()
             self.axes.append(ax)
+            last_ax = ax
 
     def get_subplot(self, index):
         return self.axes[index]
 
     def save_chart(self, path):
         self.fig.savefig(path)
+
+    def tight_layout(self):
+        self.fig.tight_layout()
+
+    def hide_xticklabels(self, ax):
+        for tick in ax.get_xticklabels():
+            tick.set_visible(False)
+
+    def hide_yticklabels(self, ax):
+        for tick in ax.get_yticklabels():
+            tick.set_visible(False)

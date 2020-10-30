@@ -1,6 +1,6 @@
 from PyQt5 import uic
-from PyQt5.QtWidgets import QMainWindow, QFileDialog, QTableView, QLabel
-from PyQt5.QtCore import pyqtSlot, QThreadPool
+from PyQt5.QtWidgets import QMainWindow, QFileDialog, QTableView
+from PyQt5.QtCore import pyqtSlot
 
 from data.tablemodel import TableModel
 from data.loaddatadialog import LoadDataDialog
@@ -10,6 +10,7 @@ from column.discretizedialog import DiscretizeDialog
 from column.normalizedialog import NormalizeDialog
 from column.scaledialog import ScaleDialog
 from column.highlightdialog import HighlightDialog
+from column.classcolumndialog import ClassColumnDialog
 
 from visualization.chart2ddialog import Chart2DDialog
 from visualization.chart3ddialog import Chart3DDialog
@@ -18,25 +19,18 @@ from visualization.chartcanvas import ChartCanvas
 from visualization.chartwindow import ChartWindow
 
 from classification.utils.knnclassifier import KNNClassifier
-from classification.utils.leaveoneouttester import LeaveOneOutTester
-from classification.utils.precalculateddistance import PrecalculatedDistance
-
 from classification.knnclassifierdialog import KNNClassifierDialog
+from classification.knntestingmanager import KNNTestingManager
 from classification.newobjectdialog import NewObjectDialog
 from classification.classificationresultwindow import ClassificationResultWindow
-from classification.testingresultwindow import TestingResultWindow
-from classification.testingworker import TestingWorker
-from classification.progresswindow import ProgressWindow
 
 class MainWindow(QMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
         self.data = None
         self.table_model = None
-        self.threadpool = QThreadPool()
-        self.threadpool.setMaxThreadCount(2)
-        self.progress_window = None
         self.load_ui()
+        self.testing_manager = None
 
     def load_ui(self):
         uic.loadUi("ui/mainwindow.ui", self)
@@ -105,8 +99,8 @@ class MainWindow(QMainWindow):
         chart = chart_canvas.get_subplot(0)
         dialog = Chart2DDialog(self, self.data, chart)
         if dialog.exec_():
-            new_window = ChartWindow(self, chart_canvas)
-            new_window.show()
+            chart_window = ChartWindow(self, chart_canvas)
+            chart_window.show()
 
     @pyqtSlot()
     def show_chart3d(self):
@@ -114,16 +108,17 @@ class MainWindow(QMainWindow):
         chart = chart_canvas.get_subplot(0)
         dialog = Chart3DDialog(self, self.data, chart)
         if dialog.exec_():
-            new_window = ChartWindow(self, chart_canvas)
-            new_window.show()
+            chart_window = ChartWindow(self, chart_canvas)
+            chart_window.show()
+
     @pyqtSlot()
     def show_histogram(self):
         chart_canvas = ChartCanvas(subplots=1)
         chart = chart_canvas.get_subplot(0)
         dialog = HistogramDialog(self, self.data, chart)
         if dialog.exec_():
-            new_window = ChartWindow(self, chart_canvas)
-            new_window.show()
+            chart_window = ChartWindow(self, chart_canvas)
+            chart_window.show()
 
     @pyqtSlot()
     def classify_knn_method(self):
@@ -133,6 +128,7 @@ class MainWindow(QMainWindow):
             metrics = dialog.metrics
             k_value = dialog.k_value
             new_object_dialog = NewObjectDialog(self, self.data, class_column_name)
+
             if new_object_dialog.exec_():
                 new_object = new_object_dialog.new_object
                 classifier = KNNClassifier(self.data, class_column_name, metrics, k_value)
@@ -149,26 +145,13 @@ class MainWindow(QMainWindow):
             metrics = dialog.metrics
             k_value = dialog.k_value
 
-            distances = PrecalculatedDistance(self.data, class_column_name, metrics)
-            classifier = KNNClassifier(self.data, class_column_name, distances, k_value)
-            tester = LeaveOneOutTester(self.data, class_column_name)
+            self.testing_manager = KNNTestingManager(self, self.data, class_column_name)
+            self.testing_manager.run_single_test(k_value, metrics)
 
-            worker = TestingWorker(tester, classifier)
-            worker.signals.result.connect(self.show_testing_result)
-            worker.signals.progress.connect(self.update_progress)
-            worker.signals.status.connect(self.update_status)
-            self.progress_window = ProgressWindow(self)
-            self.progress_window.show()
-            self.threadpool.start(worker)
-
-    def show_testing_result(self, result):
-        result_window = TestingResultWindow(self, self.data, result)
-        result_window.show()
-        self.progress_window.finish()
-        self.progress_window = None
-
-    def update_progress(self, progress):
-        self.progress_window.update(progress)
-
-    def update_status(self, status):
-        self.progress_window.update_status(status)
+    @pyqtSlot()
+    def test_knn_parameters(self):
+        dialog = ClassColumnDialog(self, self.data)
+        if dialog.exec_():
+            class_column_name = dialog.class_column_name
+            self.testing_manager = KNNTestingManager(self, self.data, class_column_name)
+            self.testing_manager.run_parameter_testing()

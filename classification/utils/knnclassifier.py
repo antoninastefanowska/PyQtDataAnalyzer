@@ -1,13 +1,19 @@
 from .classifier import Classifier
 
 class KNNClassifier(Classifier):
-    def __init__(self, data, class_column_name, metrics, k):
+    def __init__(self, data, class_column_name, metrics, k=None):
         super().__init__(data, class_column_name)
         self.metrics = metrics
         self.k = k
 
     def prepare(self):
         self.metrics.prepare()
+
+    def set_parameter(self, parameter):
+        self.k = parameter
+
+    def get_param_string(self):
+        return "K: " + str(self.k) + " Metryka: " + self.metrics.get_name()
 
     def classify(self, data_object):
         data_objects = []

@@ -1,8 +1,9 @@
-import numpy
 from matplotlib.patches import Patch
 from PyQt5 import uic
 from PyQt5.QtWidgets import QDialog, QComboBox
 from PyQt5.QtCore import pyqtSlot
+
+from .colorgenerator import ColorGenerator
 
 class Chart3DDialog(QDialog):
     def __init__(self, parent, data, chart):
@@ -41,17 +42,13 @@ class Chart3DDialog(QDialog):
             class_dictionary[value] = (data_part[x_column_name], data_part[y_column_name], data_part[z_column_name])
 
         patches = []
-        colors = ['pink', 'skyblue', 'lightgreen', 'yellow', 'coral', 'crimson', 'cornflowerblue', 'lightseagreen', 'navy', 'saddlebrown', 'slategray', 'peru', 'darkslategray', 'darkkhaki', 'magenta', 'mediumslateblue']
         i = 0
         classes.sort()
         for class_key in classes:
-            if i < 15:
-                color = colors[i]
-            else:
-                color = numpy.random.rand(3,)
+            color = ColorGenerator.get_color(i)
             self.chart.scatter(class_dictionary[class_key][0], class_dictionary[class_key][1], class_dictionary[class_key][2], c=color)
             patches.append(Patch(color=color, label=class_key))
-            i = i + 1
+            i += 1
 
         self.chart.set_xlabel(x_column_name)
         self.chart.set_ylabel(y_column_name)

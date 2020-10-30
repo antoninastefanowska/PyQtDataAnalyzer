@@ -3,10 +3,7 @@ from PyQt5.QtWidgets import QDialog, QComboBox, QLineEdit
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtGui import QIntValidator
 
-from .utils.euclideandistance import EuclideanDistance
-from .utils.manhattandistance import ManhattanDistance
-from .utils.chebyshevdistance import ChebyshevDistance
-from .utils.mahalanobisdistance import MahalanobisDistance
+from .utils.metricsfactory import MetricsFactory
 
 class KNNClassifierDialog(QDialog):
     def __init__(self, parent, data):
@@ -20,7 +17,10 @@ class KNNClassifierDialog(QDialog):
     def load_ui(self):
         uic.loadUi("ui/knnclassifierdialog.ui", self)
         class_column_name_combobox = self.findChild(QComboBox, "classColumnNameCombobox")
+        metrics_name_combobox = self.findChild(QComboBox, "metricsNameCombobox")
         k_value_textbox = self.findChild(QLineEdit, "kValueTextbox")
+
+        metrics_name_combobox.addItems(MetricsFactory.NAMES)
         class_column_name_combobox.addItems(self.data.columns)
         k_value_textbox.setValidator(QIntValidator())
 
@@ -32,15 +32,7 @@ class KNNClassifierDialog(QDialog):
         self.class_column_name = class_column_name_combobox.currentText()
         self.k_value = int(k_value_textbox.text())
         metrics_name = metrics_name_combobox.currentText()
-        if metrics_name == "euklidesowa":
-            self.metrics = EuclideanDistance()
-        elif metrics_name == "Manhattan":
-            self.metrics = ManhattanDistance()
-        elif metrics_name == "Czebyszewa":
-            self.metrics = ChebyshevDistance()
-        elif metrics_name == "Mahalanobisa":
-            no_class_data = self.data.drop(self.class_column_name, axis=1)
-            self.metrics = MahalanobisDistance(no_class_data)
+        self.metrics = MetricsFactory.get_by_name(metrics_name, self.data, self.class_column_name)
 
     @pyqtSlot()
     def accept(self):

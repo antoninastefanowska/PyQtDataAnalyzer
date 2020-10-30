@@ -14,3 +14,6 @@ class EuclideanDistance(DistanceMetrics):
             if (isinstance(value1, int) or isinstance(value1, float)) and (isinstance(value2, int) or isinstance(value2, float)):
                 sum += (value1 - value2)**2
         return np.sqrt(sum)
+
+    def get_name(self):
+        return "Euklides"

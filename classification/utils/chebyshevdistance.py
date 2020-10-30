@@ -14,3 +14,6 @@ class ChebyshevDistance(DistanceMetrics):
                 if diff > max:
                     max = diff
         return max
+
+    def get_name(self):
+        return "Czebyszew"

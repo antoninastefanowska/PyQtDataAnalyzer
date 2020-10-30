@@ -16,7 +16,11 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QHBoxLayout" name="horizontalLayout_2">
     <item>
-     <widget class="QTableView" name="tableView"/>
+     <widget class="QTableView" name="tableView">
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>
@@ -65,9 +69,16 @@
      </property>
      <addaction name="actionTestKNNMethod"/>
     </widget>
+    <widget class="QMenu" name="menuTestuj_wp_yw_parametr_w">
+     <property name="title">
+      <string>Testuj wpływ parametrów</string>
+     </property>
+     <addaction name="actionTestKNNParameters"/>
+    </widget>
     <addaction name="actionKNNMethod"/>
     <addaction name="separator"/>
     <addaction name="menuTestuj_klasyfikacj"/>
+    <addaction name="menuTestuj_wp_yw_parametr_w"/>
    </widget>
    <addaction name="menuPlik"/>
    <addaction name="menuDane"/>
@@ -143,6 +154,11 @@
   <action name="actionRemove">
    <property name="text">
     <string>Usuń</string>
+   </property>
+  </action>
+  <action name="actionTestKNNParameters">
+   <property name="text">
+    <string>Metoda KNN</string>
    </property>
   </action>
  </widget>
@@ -345,6 +361,22 @@
    <signal>triggered()</signal>
    <receiver>MainWindow</receiver>
    <slot>remove()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionTestKNNParameters</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>test_knn_parameters()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>

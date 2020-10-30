@@ -12,5 +12,12 @@ class Classifier(ABC):
     def classify(self, data_object):
         pass
 
+    @abstractmethod
+    def get_param_string(self):
+        pass
+
+    def set_parameter(self, parameter):
+        pass
+
     def prepare(self):
         pass

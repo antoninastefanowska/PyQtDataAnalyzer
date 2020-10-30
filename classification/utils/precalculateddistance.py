@@ -30,3 +30,6 @@ class PrecalculatedDistance(DistanceMetrics):
         j = data_object2.name
         result = self.distance_matrix[i][j] if self.distance_matrix[i][j] != 0 else self.distance_matrix[j][i]
         return result
+
+    def get_name(self):
+        return self.metrics.get_name()

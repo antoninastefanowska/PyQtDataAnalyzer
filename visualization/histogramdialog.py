@@ -37,10 +37,16 @@ class HistogramDialog(QDialog):
 
         labels = column.unique()
         values = []
+
+        if not any(isinstance(label, str) for label in labels):
+            width = (labels.max() - labels.min()) / len(labels)
+        else:
+            width = 0.8
+
         for label in labels:
             values.append(len(column[column == label]))
 
-        self.chart.bar(labels, values, width=((labels.max() - labels.min()) / len(labels)))
+        self.chart.bar(labels, values, width=width)
         self.chart.set_title(column_name)
 
     @pyqtSlot()

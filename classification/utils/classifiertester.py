@@ -12,6 +12,10 @@ class ClassifierTester(ABC):
     def test_classifier(self, classifier):
         pass
 
+    @abstractmethod
+    def prepare(self, classifier):
+        pass
+
     def set_progress_callback(self, progress_callback):
         self.progress_callback = progress_callback
 

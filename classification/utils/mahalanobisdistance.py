@@ -7,7 +7,7 @@ class MahalanobisDistance(DistanceMetrics):
         self.inv_cov_matrix = None
         self.data = data
 
-    def update_data(data):
+    def update_data(self, data):
         self.data = data
         self.prepare()
 
@@ -44,3 +44,6 @@ class MahalanobisDistance(DistanceMetrics):
                 removed.append(i)
             i += 1
         vec = np.delete(vec, removed)
+
+    def get_name(self):
+        return "Mahalanobis"

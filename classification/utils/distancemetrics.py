@@ -8,6 +8,10 @@ class DistanceMetrics(ABC):
     def get_distance(self, data_object1, data_object2):
         pass
 
+    @abstractmethod
+    def get_name(self):
+        pass
+
     def update_data(self, data):
         pass
 

@@ -3,14 +3,12 @@ from .classifiertester import ClassifierTester
 class LeaveOneOutTester(ClassifierTester):
     def __init__(self, data, class_column_name):
         super().__init__(data, class_column_name)
+        self.progress = 0
 
     def test_classifier(self, classifier):
         correct = 0
-        self.status_callback("Obliczanie odległości...")
-        classifier.prepare()
         n = len(self.data.index)
-
-        self.status_callback("Klasyfikowanie obiektów...")
+        self.status_callback("Klasyfikowanie obiektów... " + classifier.get_param_string())
         for index, test_row in self.data.iterrows():
             classify_data = self.data.drop(index)
             row_no_class = test_row.drop(self.class_column_name)
@@ -25,4 +23,10 @@ class LeaveOneOutTester(ClassifierTester):
                 self.progress = new_progress
                 self.progress_callback(new_progress)
 
+        self.progress = 0
+        self.progress_callback(0)
         return correct
+
+    def prepare(self, classifier):
+        self.status_callback("Obliczanie odległości...")
+        classifier.prepare()
