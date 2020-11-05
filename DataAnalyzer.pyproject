@@ -9,6 +9,7 @@
         "column/texttonumberdialog.py",
         "column/discretizedialog.py",
         "column/normalizedialog.py",
+        "column/normalizealldialog.py",
         "column/scaledialog.py",
         "column/highlightdialog.py",
         "column/classcolumndialog.py",

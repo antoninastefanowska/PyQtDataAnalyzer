@@ -8,6 +8,7 @@ from data.loaddatadialog import LoadDataDialog
 from column.texttonumberdialog import TextToNumberDialog
 from column.discretizedialog import DiscretizeDialog
 from column.normalizedialog import NormalizeDialog
+from column.normalizealldialog import NormalizeAllDialog
 from column.scaledialog import ScaleDialog
 from column.highlightdialog import HighlightDialog
 from column.classcolumndialog import ClassColumnDialog
@@ -67,6 +68,12 @@ class MainWindow(QMainWindow):
     @pyqtSlot()
     def normalize(self):
         dialog = NormalizeDialog(self, self.data)
+        if dialog.exec_():
+            self.table_model.layoutChanged.emit()
+
+    @pyqtSlot()
+    def normalize_all(self):
+        dialog = NormalizeAllDialog(self, self.data)
         if dialog.exec_():
             self.table_model.layoutChanged.emit()
 

@@ -50,6 +50,8 @@
     <addaction name="actionScale"/>
     <addaction name="actionHighlightEndValues"/>
     <addaction name="actionRemove"/>
+    <addaction name="separator"/>
+    <addaction name="actionNormalizeAll"/>
    </widget>
    <widget class="QMenu" name="menuWizualizacja">
     <property name="title">
@@ -159,6 +161,11 @@
   <action name="actionTestKNNParameters">
    <property name="text">
     <string>Metoda KNN</string>
+   </property>
+  </action>
+  <action name="actionNormalizeAll">
+   <property name="text">
+    <string>Normalizuj wszystko</string>
    </property>
   </action>
  </widget>
@@ -377,6 +384,22 @@
    <signal>triggered()</signal>
    <receiver>MainWindow</receiver>
    <slot>test_knn_parameters()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionNormalizeAll</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>normalize_all()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
