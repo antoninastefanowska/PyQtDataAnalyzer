@@ -15,13 +15,18 @@ from column.classcolumndialog import ClassColumnDialog
 
 from visualization.chart2ddialog import Chart2DDialog
 from visualization.chart3ddialog import Chart3DDialog
+from visualization.chart2dhyperplanesdialog import Chart2DHyperplanesDialog
 from visualization.histogramdialog import HistogramDialog
 from visualization.chartcanvas import ChartCanvas
 from visualization.chartwindow import ChartWindow
 
-from classification.utils.knnclassifier import KNNClassifier
-from classification.knnclassifierdialog import KNNClassifierDialog
-from classification.knntestingmanager import KNNTestingManager
+from classification.knn.classifier.knnclassifier import KNNClassifier
+from classification.knn.knnclassifierdialog import KNNClassifierDialog
+from classification.knn.knntestingmanager import KNNTestingManager
+
+from classification.hyperplane.classifier.hyperplaneclassifier import HyperplaneClassifier
+from classification.hyperplane.hyperplanetestingmanager import HyperplaneTestingManager
+
 from classification.newobjectdialog import NewObjectDialog
 from classification.classificationresultwindow import ClassificationResultWindow
 
@@ -119,6 +124,15 @@ class MainWindow(QMainWindow):
             chart_window.show()
 
     @pyqtSlot()
+    def show_chart2d_hyperplanes(self):
+        chart_canvas = ChartCanvas(subplots=1)
+        chart = chart_canvas.get_subplot(0)
+        dialog = Chart2DHyperplanesDialog(self, self.data, chart)
+        if dialog.exec_():
+            chart_window = ChartWindow(self, chart_canvas, dialog.vectors, dialog.xlims, dialog.ylims)
+            chart_window.show()
+
+    @pyqtSlot()
     def show_histogram(self):
         chart_canvas = ChartCanvas(subplots=1)
         chart = chart_canvas.get_subplot(0)
@@ -128,7 +142,7 @@ class MainWindow(QMainWindow):
             chart_window.show()
 
     @pyqtSlot()
-    def classify_knn_method(self):
+    def classify_knn_method_create(self):
         dialog = KNNClassifierDialog(self, self.data)
         if dialog.exec_():
             class_column_name = dialog.class_column_name
@@ -139,9 +153,60 @@ class MainWindow(QMainWindow):
             if new_object_dialog.exec_():
                 new_object = new_object_dialog.new_object
                 classifier = KNNClassifier(self.data, class_column_name, metrics, k_value)
-                classifier.prepare()
-                result = classifier.classify(new_object)
-                result_window = ClassificationResultWindow(self, new_object, class_column_name, result)
+                result_window = ClassificationResultWindow(self, new_object, classifier)
+                result_window.show()
+
+    @pyqtSlot()
+    def classify_knn_method_load(self):
+        dialog = KNNClassifierDialog(self, self.data)
+        if dialog.exec_():
+            class_column_name = dialog.class_column_name
+            metrics = dialog.metrics
+            k_value = dialog.k_value
+
+            filename, _ = QFileDialog.getOpenFileName(self, "Otwórz...", "", "Wszystkie pliki (*);;Pliki CSV (*.csv);;Pliki tekstowe (*.txt)", options=QFileDialog.Options())
+            if filename:
+                dialog = LoadDataDialog(self, filename)
+                if dialog.exec_():
+                    columns = self.data.columns
+                    columns = columns[columns != class_column_name]
+                    loaded_data = dialog.data
+                    loaded_data.columns = columns
+                    new_object = loaded_data.iloc[0]
+                    classifier = KNNClassifier(self.data, class_column_name, metrics, k_value)
+                result_window = ClassificationResultWindow(self, new_object, classifier)
+                result_window.show()
+
+    @pyqtSlot()
+    def classify_hyperplane_method_create(self):
+        dialog = ClassColumnDialog(self, self.data)
+        if dialog.exec_():
+            class_column_name = dialog.class_column_name
+            new_object_dialog = NewObjectDialog(self, self.data, class_column_name)
+
+            if new_object_dialog.exec_():
+                new_object = new_object_dialog.new_object
+                classifier = HyperplaneClassifier(self.data, class_column_name)
+                result_window = ClassificationResultWindow(self, new_object, classifier)
+                result_window.show()
+
+    @pyqtSlot()
+    def classify_hyperplane_method_load(self):
+        dialog = ClassColumnDialog(self, self.data)
+        if dialog.exec_():
+            class_column_name = dialog.class_column_name
+
+            filename, _ = QFileDialog.getOpenFileName(self, "Otwórz...", "", "Wszystkie pliki (*);;Pliki CSV (*.csv);;Pliki tekstowe (*.txt)", options=QFileDialog.Options())
+            if filename:
+                dialog = LoadDataDialog(self, filename)
+                if dialog.exec_():
+                    columns = self.data.columns
+                    columns = columns[columns != class_column_name]
+                    loaded_data = dialog.data
+                    loaded_data.columns = columns
+                    new_object = loaded_data.iloc[0]
+                    classifier = HyperplaneClassifier(self.data, class_column_name)
+                result_window = ClassificationResultWindow(self, new_object, classifier)
                 result_window.show()
 
     @pyqtSlot()
@@ -156,9 +221,19 @@ class MainWindow(QMainWindow):
             self.testing_manager.run_single_test(k_value, metrics)
 
     @pyqtSlot()
+    def test_hyperplane_method(self):
+        dialog = ClassColumnDialog(self, self.data)
+        if dialog.exec_():
+            class_column_name = dialog.class_column_name
+
+            self.testing_manager = HyperplaneTestingManager(self, self.data, class_column_name)
+            self.testing_manager.run_single_test()
+
+    @pyqtSlot()
     def test_knn_parameters(self):
         dialog = ClassColumnDialog(self, self.data)
         if dialog.exec_():
             class_column_name = dialog.class_column_name
             self.testing_manager = KNNTestingManager(self, self.data, class_column_name)
             self.testing_manager.run_parameter_testing()
+

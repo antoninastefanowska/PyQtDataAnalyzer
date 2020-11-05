@@ -28,5 +28,5 @@ class LeaveOneOutTester(ClassifierTester):
         return correct
 
     def prepare(self, classifier):
-        self.status_callback("Obliczanie odległości...")
+        self.status_callback("Przygotowywanie...")
         classifier.prepare()

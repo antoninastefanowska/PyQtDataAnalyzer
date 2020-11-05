@@ -10,6 +10,9 @@ class Chart2DDialog(QDialog):
         super().__init__(parent)
         self.data = data
         self.chart = chart
+        self.x_column_name = None
+        self.y_column_name = None
+        self.class_column_name = None
         self.load_ui()
 
     def load_ui(self):
@@ -26,16 +29,16 @@ class Chart2DDialog(QDialog):
         y_column_name_combobox = self.findChild(QComboBox, "yColumnNameCombobox")
         class_column_name_combobox = self.findChild(QComboBox, "classColumnNameCombobox")
 
-        x_column_name = x_column_name_combobox.currentText()
-        y_column_name = y_column_name_combobox.currentText()
-        class_column_name = class_column_name_combobox.currentText()
+        self.x_column_name = x_column_name_combobox.currentText()
+        self.y_column_name = y_column_name_combobox.currentText()
+        self.class_column_name = class_column_name_combobox.currentText()
 
-        class_column = self.data[class_column_name]
+        class_column = self.data[self.class_column_name]
         classes = class_column.unique()
         class_dictionary = {}
         for value in classes:
             data_part = self.data[class_column == value]
-            class_dictionary[value] = (data_part[x_column_name], data_part[y_column_name])
+            class_dictionary[value] = (data_part[self.x_column_name], data_part[self.y_column_name])
 
         patches = []
         i = 0
@@ -46,8 +49,8 @@ class Chart2DDialog(QDialog):
             patches.append(Patch(color=color, label=class_key))
             i += 1
 
-        self.chart.set_xlabel(x_column_name)
-        self.chart.set_ylabel(y_column_name)
+        self.chart.set_xlabel(self.x_column_name)
+        self.chart.set_ylabel(self.y_column_name)
         self.chart.legend(handles=patches)
 
     @pyqtSlot()

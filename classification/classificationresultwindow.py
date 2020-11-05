@@ -1,13 +1,26 @@
+import pandas as pd
+
 from PyQt5 import uic, QtCore
-from PyQt5.QtWidgets import QMainWindow, QHBoxLayout, QVBoxLayout, QLabel
+from PyQt5.QtWidgets import QMainWindow, QFileDialog, QHBoxLayout, QVBoxLayout, QLabel
+from PyQt5.QtCore import pyqtSlot
 
 class ClassificationResultWindow(QMainWindow):
-    def __init__(self, parent, data_object, class_column_name, result):
+    def __init__(self, parent, data_object, classifier):
         super().__init__(parent)
         self.data_object = data_object
-        self.class_column_name = class_column_name
-        self.result = result
+        self.class_column_name = classifier.class_column_name
+        self.classifier = classifier
+        self.classifier_output_data = None
+        self.result = None
+        self.result_info = None
+        self.classify()
         self.load_ui()
+
+    def classify(self):
+        self.classifier.prepare()
+        self.result = self.classifier.classify(self.data_object)
+        self.result_info = self.classifier.get_result_info_string()
+        self.classifier_output_data = self.classifier.get_classifier_output_data()
 
     def load_ui(self):
         uic.loadUi("ui/classificationresultwindow.ui", self)
@@ -16,9 +29,11 @@ class ClassificationResultWindow(QMainWindow):
         attributes_layout = self.findChild(QVBoxLayout, "attributesLayout")
         class_column_name_label = self.findChild(QLabel, "classColumnNameLabel")
         result_label = self.findChild(QLabel, "resultLabel")
+        result_info_label = self.findChild(QLabel, "resultInfoLabel")
 
         class_column_name_label.setText(self.class_column_name)
         result_label.setText(str(self.result))
+        result_info_label.setText(self.result_info)
 
         column_names = self.data_object.index
         i = 0
@@ -42,3 +57,11 @@ class ClassificationResultWindow(QMainWindow):
                 attributes_layout.addLayout(column_names_layout)
                 attributes_layout.addLayout(column_values_layout)
                 i = 0
+
+    @pyqtSlot()
+    def export_classifier_data(self):
+        if isinstance(self.classifier_output_data, pd.DataFrame):
+            filename, _ = QFileDialog.getSaveFileName(self, "Zapisz jako...", "", "Wszystkie pliki (*);;Pliki CSV (*.csv);;Pliki tekstowe (*.txt)", options=QFileDialog.Options())
+            if filename:
+                self.classifier_output_data.to_csv(filename, sep=';', header=True, index=False)
+

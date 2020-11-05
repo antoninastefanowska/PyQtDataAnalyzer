@@ -16,8 +16,15 @@ class Classifier(ABC):
     def get_param_string(self):
         pass
 
+    @abstractmethod
+    def get_result_info_string(self):
+        pass
+
     def set_parameter(self, parameter):
         pass
 
     def prepare(self):
         pass
+
+    def get_classifier_output_data(self):
+        return None

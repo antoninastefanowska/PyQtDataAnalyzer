@@ -1,27 +1,21 @@
 from PyQt5.QtCore import QThreadPool
 
-from .testingresultwindow import TestingResultWindow
-from .testingworker import TestingWorker
-from .progresswindow import ProgressWindow
+from ..testingworker import TestingWorker
+from ..progresswindow import ProgressWindow
 
-from .utils.knnclassifier import KNNClassifier
-from .utils.metricsfactory import MetricsFactory
-from .utils.leaveoneouttester import LeaveOneOutTester
-from .utils.precalculateddistance import PrecalculatedDistance
+from .classifier.knnclassifier import KNNClassifier
+from .classifier.metricsfactory import MetricsFactory
+from .classifier.precalculateddistance import PrecalculatedDistance
+from ..utils.testingmanager import TestingManager
+from ..utils.leaveoneouttester import LeaveOneOutTester
 
 from visualization.chartcanvas import ChartCanvas
 from visualization.chartwindow import ChartWindow
 from visualization.colorgenerator import ColorGenerator
 
-class KNNTestingManager:
+class KNNTestingManager(TestingManager):
     def __init__(self, context, data, class_column_name):
-        self.context = context
-        self.data = data
-        self.class_column_name = class_column_name
-
-        self.progress_window = None
-        self.test_count = 0
-        self.all_results = []
+        super().__init__(context, data, class_column_name)
 
     def run_single_test(self, k_value, metrics):
         distances = PrecalculatedDistance(self.data, self.class_column_name, metrics)
@@ -57,12 +51,6 @@ class KNNTestingManager:
 
         QThreadPool.globalInstance().start(worker)
 
-    def show_single_testing_result(self, result):
-        result_window = TestingResultWindow(self.context, self.data, result)
-        result_window.show()
-        self.progress_window.finish()
-        self.progress_window = None
-
     def finish_test_session(self, result_set):
         self.test_count += 1
         self.all_results.append(result_set)
@@ -95,9 +83,3 @@ class KNNTestingManager:
             chart_window.show()
             self.progress_window.finish()
             self.progress_window = None
-
-    def update_progress(self, progress):
-        self.progress_window.update(progress)
-
-    def update_status(self, status):
-        self.progress_window.update_status(status)
