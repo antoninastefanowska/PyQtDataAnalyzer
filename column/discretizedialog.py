@@ -28,7 +28,7 @@ class DiscretizeDialog(QDialog):
         bar_number = int(bar_number_textbox.text())
         step = (max - min) / bar_number
 
-        column = column.map(lambda value: math.ceil((value - min) / step))
+        column = column.map(lambda value: int(math.ceil((value - min) / step)))
         column[column == 0] = 1
 
         name = column_name + "_dyskretne"
