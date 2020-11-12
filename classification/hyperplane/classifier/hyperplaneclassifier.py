@@ -12,30 +12,33 @@ class HyperplaneClassifier(Classifier):
     def prepare(self):
         column_names = self.data.columns[self.data.columns != self.class_column_name]
         current_data = self.data
-        done = False
-        while not done:
+        while True:
+            max = 0
             for column_name in column_names:
                 sorted_data = current_data.sort_values(by=[column_name, self.class_column_name])
 
                 separated_negative, point_negative, class_negative, removed_negative = self.separate_data(sorted_data, column_name)
 
                 if len(current_data) == len(separated_negative):
-                    done = True
-                    break
+                    return
 
                 separated_positive, point_positive, class_positive, removed_positive = self.separate_data(sorted_data[::-1], column_name)
 
-                if len(separated_negative) > len(separated_positive):
-                    vector = Vector(0, point_negative, column_name, class_negative)
-                    self.vectors.append(vector)
-                    self.removed_count += removed_negative
-                    current_data = current_data.drop([row.name for row in separated_negative])
+                if len(separated_negative) > max:
+                    max = len(separated_negative)
+                    max_vector = Vector(0, point_negative, column_name, class_negative)
+                    max_removed = removed_negative
+                    max_separated_data = separated_negative
 
-                else:
-                    vector = Vector(1, point_positive, column_name, class_positive)
-                    self.vectors.append(vector)
-                    self.removed_count += removed_positive
-                    current_data = current_data.drop([row.name for row in separated_positive])
+                if len(separated_positive) > max:
+                    max = len(separated_positive)
+                    max_vector = Vector(1, point_positive, column_name, class_positive)
+                    max_removed = removed_positive
+                    max_separated_data = separated_positive
+
+            self.vectors.append(max_vector)
+            self.removed_count += max_removed
+            current_data = current_data.drop([row.name for row in max_separated_data])
 
     def separate_data(self, data, column_name):
         old_class_value = None
