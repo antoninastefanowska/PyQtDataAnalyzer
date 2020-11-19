@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>320</width>
-    <height>300</height>
+    <height>307</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -70,6 +70,27 @@
        <property name="text">
         <string>3</string>
        </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_5">
+       <property name="text">
+        <string>Metoda inicjalizacji:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="initializationMethodCombobox">
+       <item>
+        <property name="text">
+         <string>random</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>k-means++</string>
+        </property>
+       </item>
       </widget>
      </item>
     </layout>

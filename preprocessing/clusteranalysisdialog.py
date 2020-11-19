@@ -29,17 +29,19 @@ class ClusterAnalysisDialog(QDialog):
         start_column_name_combobox = self.findChild(QComboBox, "startColumnNameCombobox")
         end_column_name_combobox = self.findChild(QComboBox, "endColumnNameCombobox")
         metrics_name_combobox = self.findChild(QComboBox, "metricsNameCombobox")
+        initialization_method_combobox = self.findChild(QComboBox, "initializationMethodCombobox")
         k_value_textbox = self.findChild(QLineEdit, "kValueTextbox")
 
         start_column_name = start_column_name_combobox.currentText()
         end_column_name = end_column_name_combobox.currentText()
-        k_value = int(k_value_textbox.text())
         metrics_name = metrics_name_combobox.currentText()
+        initialization_method = initialization_method_combobox.currentText()
+        k_value = int(k_value_textbox.text())
 
         data_part = self.data.loc[:, start_column_name:end_column_name]
         metrics = MetricsFactory.get_by_name(metrics_name, data_part)
 
-        k_means_clustering = KMeansClustering(data_part, k_value, metrics)
+        k_means_clustering = KMeansClustering(data_part, k_value, metrics, initialization_method)
         cluster_column = k_means_clustering.k_means()
         name = NameGenerator.get_name(self.data.columns, "klaster", "")
         self.data[name] = cluster_column
