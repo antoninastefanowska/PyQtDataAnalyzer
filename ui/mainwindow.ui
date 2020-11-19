@@ -30,7 +30,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuPlik">
@@ -42,7 +42,7 @@
    </widget>
    <widget class="QMenu" name="menuDane">
     <property name="title">
-     <string>Kolumna</string>
+     <string>Preprocessing</string>
     </property>
     <addaction name="actionTextToNumbers"/>
     <addaction name="actionDiscretize"/>
@@ -52,6 +52,7 @@
     <addaction name="actionRemove"/>
     <addaction name="separator"/>
     <addaction name="actionNormalizeAll"/>
+    <addaction name="actionClusterAnalysis"/>
    </widget>
    <widget class="QMenu" name="menuWizualizacja">
     <property name="title">
@@ -167,7 +168,7 @@
   </action>
   <action name="actionRemove">
    <property name="text">
-    <string>Usuń</string>
+    <string>Usuń zaznaczoną kolumnę</string>
    </property>
   </action>
   <action name="actionTestKNNParameters">
@@ -208,6 +209,11 @@
   <action name="actionHyperplaneMethodLoad">
    <property name="text">
     <string>Załaduj nowy obiekt</string>
+   </property>
+  </action>
+  <action name="actionClusterAnalysis">
+   <property name="text">
+    <string>Analiza skupień</string>
    </property>
   </action>
  </widget>
@@ -522,6 +528,22 @@
    <signal>triggered()</signal>
    <receiver>MainWindow</receiver>
    <slot>classify_hyperplane_method_load()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionClusterAnalysis</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>cluster_analysis()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>

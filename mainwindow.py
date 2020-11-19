@@ -5,13 +5,13 @@ from PyQt5.QtCore import pyqtSlot
 from data.tablemodel import TableModel
 from data.loaddatadialog import LoadDataDialog
 
-from column.texttonumberdialog import TextToNumberDialog
-from column.discretizedialog import DiscretizeDialog
-from column.normalizedialog import NormalizeDialog
-from column.normalizealldialog import NormalizeAllDialog
-from column.scaledialog import ScaleDialog
-from column.highlightdialog import HighlightDialog
-from column.classcolumndialog import ClassColumnDialog
+from preprocessing.texttonumberdialog import TextToNumberDialog
+from preprocessing.discretizedialog import DiscretizeDialog
+from preprocessing.normalizedialog import NormalizeDialog
+from preprocessing.normalizealldialog import NormalizeAllDialog
+from preprocessing.scaledialog import ScaleDialog
+from preprocessing.highlightdialog import HighlightDialog
+from preprocessing.classcolumndialog import ClassColumnDialog
 
 from visualization.chart2ddialog import Chart2DDialog
 from visualization.chart3ddialog import Chart3DDialog
@@ -29,6 +29,9 @@ from classification.hyperplane.hyperplanetestingmanager import HyperplaneTesting
 
 from classification.newobjectdialog import NewObjectDialog
 from classification.classificationresultwindow import ClassificationResultWindow
+
+from preprocessing.clusteranalysisdialog import ClusterAnalysisDialog
+from preprocessing.kmeansclustering import KMeansClustering
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -237,3 +240,8 @@ class MainWindow(QMainWindow):
             self.testing_manager = KNNTestingManager(self, self.data, class_column_name)
             self.testing_manager.run_parameter_testing()
 
+    @pyqtSlot()
+    def cluster_analysis(self):
+        dialog = ClusterAnalysisDialog(self, self.data)
+        if dialog.exec_():
+            self.table_model.layoutChanged.emit()

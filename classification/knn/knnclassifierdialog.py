@@ -32,7 +32,9 @@ class KNNClassifierDialog(QDialog):
         self.class_column_name = class_column_name_combobox.currentText()
         self.k_value = int(k_value_textbox.text())
         metrics_name = metrics_name_combobox.currentText()
-        self.metrics = MetricsFactory.get_by_name(metrics_name, self.data, self.class_column_name)
+
+        no_class_data = self.data.drop(self.class_column_name, axis=1)
+        self.metrics = MetricsFactory.get_by_name(metrics_name, no_class_data)
 
     @pyqtSlot()
     def accept(self):

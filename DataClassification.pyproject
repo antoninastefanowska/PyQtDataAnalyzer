@@ -6,13 +6,16 @@
         "data/tablemodel.py",
         "data/loaddatadialog.py",
 
-        "column/texttonumberdialog.py",
-        "column/discretizedialog.py",
-        "column/normalizedialog.py",
-        "column/normalizealldialog.py",
-        "column/scaledialog.py",
-        "column/highlightdialog.py",
-        "column/classcolumndialog.py",
+        "preprocessing/namegenerator.py",
+        "preprocessing/texttonumberdialog.py",
+        "preprocessing/discretizedialog.py",
+        "preprocessing/normalizedialog.py",
+        "preprocessing/normalizealldialog.py",
+        "preprocessing/scaledialog.py",
+        "preprocessing/highlightdialog.py",
+        "preprocessing/classcolumndialog.py",
+        "preprocessing/clusteranalysisdialog.py",
+        "preprocessing/kmeansclustering.py",
 
         "visualization/chart2ddialog.py",
         "visualization/chart3ddialog.py",
@@ -65,6 +68,7 @@
         "ui/knnclassifierdialog.ui",
         "ui/classificationresultwindow.ui",
         "ui/testingresultwindow.ui",
-        "ui/progresswindow.ui"
+        "ui/progresswindow.ui",
+        "ui/clusteranalysisdialog.ui"
     ]
 }

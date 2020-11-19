@@ -2,6 +2,8 @@ from PyQt5 import uic
 from PyQt5.QtWidgets import QDialog, QComboBox, QRadioButton
 from PyQt5.QtCore import pyqtSlot
 
+from .namegenerator import NameGenerator
+
 class TextToNumberDialog(QDialog):
     def __init__(self, parent, data):
         super().__init__(parent)
@@ -30,11 +32,7 @@ class TextToNumberDialog(QDialog):
             counter = counter + 1
             dictionary[value] = counter
 
-        name = column_name + "_numer"
-        i = 2
-        while name in self.data.columns:
-            name = column_name + "_numer_" + str(i)
-            i += 1
+        name = NameGenerator.get_name(self.data.columns, column_name, "_numeryczne")
         self.data[name] = column.map(dictionary)
 
     @pyqtSlot()

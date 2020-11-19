@@ -20,9 +20,9 @@ class TableModel(QAbstractTableModel):
             if role == Qt.DisplayRole:
                 return QVariant(str(self.data.values[index.row()][index.column()]))
             elif role == Qt.BackgroundRole:
-                if isinstance(self.red_rows, Int64Index) and index.row() in self.red_rows:
+                if self.red_rows is not None and index.row() in self.red_rows:
                     return QColor('red')
-                elif isinstance(self.green_rows, Int64Index) and index.row() in self.green_rows:
+                elif self.green_rows is not None and index.row() in self.green_rows:
                     return QColor('green')
                 else:
                     return QColor('white')

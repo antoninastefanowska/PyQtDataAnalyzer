@@ -1,0 +1,6 @@
+*.user
+__pycache__
+
+.vscode/
+venv/
+.history

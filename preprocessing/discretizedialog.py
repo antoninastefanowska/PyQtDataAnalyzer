@@ -4,6 +4,8 @@ from PyQt5.QtWidgets import QDialog, QComboBox, QLineEdit
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtGui import QIntValidator
 
+from .namegenerator import NameGenerator
+
 class DiscretizeDialog(QDialog):
     def __init__(self, parent, data):
         super().__init__(parent)
@@ -31,11 +33,7 @@ class DiscretizeDialog(QDialog):
         column = column.map(lambda value: int(math.ceil((value - min) / step)))
         column[column == 0] = 1
 
-        name = column_name + "_dyskretne"
-        i = 2
-        while name in self.data.columns:
-            name = column_name + "_dyskretne_" + str(i)
-            i += 1
+        name = NameGenerator.get_name(self.data.columns, column_name, "_dyskretne")
         self.data[name] = column
 
     @pyqtSlot()

@@ -10,12 +10,12 @@ class MetricsFactory:
         pass
 
     @staticmethod
-    def get_by_name(name, data, class_column_name):
+    def get_by_name(name, data):
         index = MetricsFactory.NAMES.index(name)
-        return MetricsFactory.get_by_id(index, data, class_column_name)
+        return MetricsFactory.get_by_id(index, data,)
 
     @staticmethod
-    def get_by_id(id, data, class_column_name):
+    def get_by_id(id, data):
         if id == 0:
             return EuclideanDistance()
         elif id == 1:
@@ -23,8 +23,7 @@ class MetricsFactory:
         elif id == 2:
             return ChebyshevDistance()
         elif id == 3:
-            no_class_data = data.drop(class_column_name, axis=1)
-            return MahalanobisDistance(no_class_data)
+            return MahalanobisDistance(data)
 
     @staticmethod
     def get_count():
