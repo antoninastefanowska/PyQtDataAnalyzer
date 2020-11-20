@@ -1,4 +1,3 @@
-from pandas import Int64Index
 from PyQt5.QtCore import QAbstractTableModel, Qt, QVariant
 from PyQt5.QtGui import QColor
 

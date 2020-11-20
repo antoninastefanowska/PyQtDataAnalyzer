@@ -3,6 +3,7 @@ from PyQt5.QtWidgets import QDialog, QComboBox, QRadioButton
 from PyQt5.QtCore import pyqtSlot
 
 from .namegenerator import NameGenerator
+from .columnprocessor import ColumnProcessor
 
 class TextToNumberDialog(QDialog):
     def __init__(self, parent, data):
@@ -21,19 +22,11 @@ class TextToNumberDialog(QDialog):
         column = self.data[column_name]
 
         alphabetically_radio_button = self.findChild(QRadioButton, "alphabeticallyRadioButton")
+        alphabetically = alphabetically_radio_button.isChecked()
 
-        strings = column.unique()
-        if alphabetically_radio_button.isChecked():
-            strings.sort()
-
-        counter = 0
-        dictionary = {}
-        for value in strings:
-            counter = counter + 1
-            dictionary[value] = counter
-
+        processor = ColumnProcessor(column)
         name = NameGenerator.get_name(self.data.columns, column_name, "_numeryczne")
-        self.data[name] = column.map(dictionary)
+        self.data[name] = processor.text_to_numbers(alphabetically)
 
     @pyqtSlot()
     def accept(self):

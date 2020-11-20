@@ -2,6 +2,8 @@ from PyQt5 import uic
 from PyQt5.QtWidgets import QDialog, QComboBox
 from PyQt5.QtCore import pyqtSlot
 
+from .columnprocessor import ColumnProcessor
+
 class NormalizeAllDialog(QDialog):
     def __init__(self, parent, data):
         super().__init__(parent)
@@ -20,9 +22,8 @@ class NormalizeAllDialog(QDialog):
 
         for column_name in column_names:
             column = self.data[column_name]
-            mean = column.mean()
-            std = column.std()
-            self.data[column_name] = column.map(lambda value: round((value - mean) / std, 4))
+            processor = ColumnProcessor(column)
+            self.data[column_name] = processor.normalize()
 
     @pyqtSlot()
     def accept(self):

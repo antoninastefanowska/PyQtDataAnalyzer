@@ -4,6 +4,7 @@ from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtGui import QDoubleValidator
 
 from .namegenerator import NameGenerator
+from .columnprocessor import ColumnProcessor
 
 class ScaleDialog(QDialog):
     def __init__(self, parent, data):
@@ -29,11 +30,10 @@ class ScaleDialog(QDialog):
         column = self.data[column_name]
         a = float(from_textbox.text())
         b = float(to_textbox.text())
-        min = column.min()
-        max = column.max()
 
+        processor = ColumnProcessor(column)
         name = NameGenerator.get_name(self.data.columns, column_name, "_skalowane")
-        self.data[name] = column.map(lambda value: round((b - a) * (value - min) / (max - min) + a, 4))
+        self.data[name] = processor.scale(a, b)
 
     @pyqtSlot()
     def accept(self):

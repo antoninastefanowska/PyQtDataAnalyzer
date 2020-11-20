@@ -1,10 +1,10 @@
-import math
 from PyQt5 import uic
 from PyQt5.QtWidgets import QDialog, QComboBox, QLineEdit
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtGui import QIntValidator
 
 from .namegenerator import NameGenerator
+from .columnprocessor import ColumnProcessor
 
 class DiscretizeDialog(QDialog):
     def __init__(self, parent, data):
@@ -25,16 +25,11 @@ class DiscretizeDialog(QDialog):
 
         column_name = column_name_combobox.currentText()
         column = self.data[column_name]
-        min = column.min()
-        max = column.max()
         bar_number = int(bar_number_textbox.text())
-        step = (max - min) / bar_number
 
-        column = column.map(lambda value: int(math.ceil((value - min) / step)))
-        column[column == 0] = 1
-
+        processor = ColumnProcessor(column)
         name = NameGenerator.get_name(self.data.columns, column_name, "_dyskretne")
-        self.data[name] = column
+        self.data[name] = processor.discretize(bar_number)
 
     @pyqtSlot()
     def accept(self):

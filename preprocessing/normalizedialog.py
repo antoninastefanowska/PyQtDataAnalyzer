@@ -3,6 +3,7 @@ from PyQt5.QtWidgets import QDialog, QComboBox
 from PyQt5.QtCore import pyqtSlot
 
 from .namegenerator import NameGenerator
+from .columnprocessor import ColumnProcessor
 
 class NormalizeDialog(QDialog):
     def __init__(self, parent, data):
@@ -19,11 +20,10 @@ class NormalizeDialog(QDialog):
         column_name_combobox = self.findChild(QComboBox, "columnNameCombobox")
         column_name = column_name_combobox.currentText()
         column = self.data[column_name]
-        mean = column.mean()
-        std = column.std()
 
+        processor = ColumnProcessor(column)
         name = NameGenerator.get_name(self.data.columns, column_name, "_normalizowane")
-        self.data[name] = column.map(lambda value: round((value - mean) / std, 4))
+        self.data[name] = processor.normalize()
 
     @pyqtSlot()
     def accept(self):

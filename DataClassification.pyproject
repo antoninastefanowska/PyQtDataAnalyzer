@@ -7,6 +7,7 @@
         "data/loaddatadialog.py",
 
         "preprocessing/namegenerator.py",
+        "preprocessing/columnprocessor.py",
         "preprocessing/texttonumberdialog.py",
         "preprocessing/discretizedialog.py",
         "preprocessing/normalizedialog.py",
