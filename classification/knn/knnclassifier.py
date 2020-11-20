@@ -1,4 +1,4 @@
-from ...utils.classifier import Classifier
+from classification.classifier import Classifier
 
 class KNNClassifier(Classifier):
     def __init__(self, data, class_column_name, metrics, k=None):

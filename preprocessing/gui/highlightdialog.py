@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import QDialog, QComboBox, QLineEdit
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtGui import QIntValidator
 
-from .columnprocessor import ColumnProcessor
+from preprocessing.columnprocessor import ColumnProcessor
 
 class HighlightDialog(QDialog):
     def __init__(self, parent, data):

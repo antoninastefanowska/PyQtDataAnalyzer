@@ -1,12 +1,12 @@
 from PyQt5.QtCore import QThreadPool
 
-from ..testingworker import TestingWorker
-from ..progresswindow import ProgressWindow
+from classification.utils.testingworker import TestingWorker
+from classification.gui.progresswindow import ProgressWindow
 
-from ..utils.testingmanager import TestingManager
-from ..utils.leaveoneouttester import LeaveOneOutTester
+from classification.utils.testingmanager import TestingManager
+from classification.leaveoneouttester import LeaveOneOutTester
 
-from .classifier.hyperplaneclassifier import HyperplaneClassifier
+from classification.hyperplane.hyperplaneclassifier import HyperplaneClassifier
 
 class HyperplaneTestingManager(TestingManager):
     def __init__(self, context, data, class_column_name):

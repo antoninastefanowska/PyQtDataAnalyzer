@@ -3,9 +3,9 @@ from PyQt5.QtWidgets import QDialog, QComboBox, QLineEdit
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtGui import QIntValidator
 
-from classification.knn.classifier.metricsfactory import MetricsFactory
-from .kmeansclustering import KMeansClustering
-from .namegenerator import NameGenerator
+from metrics.metricsfactory import MetricsFactory
+from preprocessing.kmeansclustering import KMeansClustering
+from preprocessing.utils.namegenerator import NameGenerator
 
 class ClusterAnalysisDialog(QDialog):
     def __init__(self, parent, data):

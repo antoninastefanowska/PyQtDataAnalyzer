@@ -2,7 +2,7 @@ from PyQt5 import uic
 from PyQt5.QtWidgets import QDialog, QComboBox
 from PyQt5.QtCore import pyqtSlot
 
-from .columnprocessor import ColumnProcessor
+from preprocessing.columnprocessor import ColumnProcessor
 
 class NormalizeAllDialog(QDialog):
     def __init__(self, parent, data):

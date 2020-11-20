@@ -1,8 +1,9 @@
-import math
 from PyQt5 import uic
 from PyQt5.QtWidgets import QDialog, QComboBox, QCheckBox, QLineEdit
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtGui import QIntValidator
+
+from preprocessing.columnprocessor import ColumnProcessor
 
 class HistogramDialog(QDialog):
     def __init__(self, parent, data, chart):
@@ -27,13 +28,8 @@ class HistogramDialog(QDialog):
         if discretize_checkbox.isChecked():
             bar_number_textbox = self.findChild(QLineEdit, "barNumberTextbox")
             bar_number = int(bar_number_textbox.text())
-
-            min = column.min()
-            max = column.max()
-            step = (max - min) / bar_number
-
-            column = column.map(lambda value: math.ceil((value - min) / step) * step + min)
-            column = column.drop(column[column == min].index)
+            processor = ColumnProcessor(column)
+            column = processor.discretize(bar_number)
 
         labels = column.unique()
         values = []

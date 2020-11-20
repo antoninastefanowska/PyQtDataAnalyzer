@@ -1,17 +1,17 @@
 from PyQt5.QtCore import QThreadPool
 
-from ..testingworker import TestingWorker
-from ..progresswindow import ProgressWindow
+from classification.utils.testingworker import TestingWorker
+from classification.gui.progresswindow import ProgressWindow
 
-from .classifier.knnclassifier import KNNClassifier
-from .classifier.metricsfactory import MetricsFactory
-from .classifier.precalculateddistance import PrecalculatedDistance
-from ..utils.testingmanager import TestingManager
-from ..utils.leaveoneouttester import LeaveOneOutTester
+from classification.knn.knnclassifier import KNNClassifier
+from metrics.metricsfactory import MetricsFactory
+from metrics.precalculateddistance import PrecalculatedDistance
+from classification.utils.testingmanager import TestingManager
+from classification.leaveoneouttester import LeaveOneOutTester
 
 from visualization.chartcanvas import ChartCanvas
-from visualization.chartwindow import ChartWindow
-from visualization.colorgenerator import ColorGenerator
+from visualization.gui.chartwindow import ChartWindow
+from visualization.utils.colorgenerator import ColorGenerator
 
 class KNNTestingManager(TestingManager):
     def __init__(self, context, data, class_column_name):

@@ -27,7 +27,7 @@ class TableModel(QAbstractTableModel):
                     return QColor('white')
         return QVariant()
 
-    def headerData(self, col, orientation, role):
+    def headerData(self, col, orientation, role=None):
         if orientation == Qt.Horizontal and role == Qt.DisplayRole:
             return self.data.columns[col]
         else:

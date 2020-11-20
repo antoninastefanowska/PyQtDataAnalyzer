@@ -1,6 +1,6 @@
 import pandas as pd
 
-from ...utils.classifier import Classifier
+from classification.classifier import Classifier
 from .vector import Vector
 
 class HyperplaneClassifier(Classifier):

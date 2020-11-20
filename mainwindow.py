@@ -5,33 +5,32 @@ from PyQt5.QtCore import pyqtSlot
 from data.tablemodel import TableModel
 from data.loaddatadialog import LoadDataDialog
 
-from preprocessing.texttonumberdialog import TextToNumberDialog
-from preprocessing.discretizedialog import DiscretizeDialog
-from preprocessing.normalizedialog import NormalizeDialog
-from preprocessing.normalizealldialog import NormalizeAllDialog
-from preprocessing.scaledialog import ScaleDialog
-from preprocessing.highlightdialog import HighlightDialog
-from preprocessing.classcolumndialog import ClassColumnDialog
+from preprocessing.gui.texttonumberdialog import TextToNumberDialog
+from preprocessing.gui.discretizedialog import DiscretizeDialog
+from preprocessing.gui.normalizedialog import NormalizeDialog
+from preprocessing.gui.normalizealldialog import NormalizeAllDialog
+from preprocessing.gui.scaledialog import ScaleDialog
+from preprocessing.gui.highlightdialog import HighlightDialog
+from preprocessing.gui.classcolumndialog import ClassColumnDialog
 
-from visualization.chart2ddialog import Chart2DDialog
-from visualization.chart3ddialog import Chart3DDialog
-from visualization.chart2dhyperplanesdialog import Chart2DHyperplanesDialog
-from visualization.histogramdialog import HistogramDialog
+from visualization.gui.chart2ddialog import Chart2DDialog
+from visualization.gui.chart3ddialog import Chart3DDialog
+from visualization.gui.chart2dhyperplanesdialog import Chart2DHyperplanesDialog
+from visualization.gui.histogramdialog import HistogramDialog
+from visualization.gui.chartwindow import ChartWindow
 from visualization.chartcanvas import ChartCanvas
-from visualization.chartwindow import ChartWindow
 
-from classification.knn.classifier.knnclassifier import KNNClassifier
-from classification.knn.knnclassifierdialog import KNNClassifierDialog
-from classification.knn.knntestingmanager import KNNTestingManager
+from classification.knn.knnclassifier import KNNClassifier
+from classification.knn.gui.knnclassifierdialog import KNNClassifierDialog
+from classification.knn.utils.knntestingmanager import KNNTestingManager
 
-from classification.hyperplane.classifier.hyperplaneclassifier import HyperplaneClassifier
-from classification.hyperplane.hyperplanetestingmanager import HyperplaneTestingManager
+from classification.hyperplane.hyperplaneclassifier import HyperplaneClassifier
+from classification.hyperplane.utils.hyperplanetestingmanager import HyperplaneTestingManager
 
-from classification.newobjectdialog import NewObjectDialog
-from classification.classificationresultwindow import ClassificationResultWindow
+from classification.gui.newobjectdialog import NewObjectDialog
+from classification.gui.classificationresultwindow import ClassificationResultWindow
 
-from preprocessing.clusteranalysisdialog import ClusterAnalysisDialog
-from preprocessing.kmeansclustering import KMeansClustering
+from preprocessing.gui.clusteranalysisdialog import ClusterAnalysisDialog
 
 class MainWindow(QMainWindow):
     def __init__(self):

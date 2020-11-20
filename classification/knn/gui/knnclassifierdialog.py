@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import QDialog, QComboBox, QLineEdit
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtGui import QIntValidator
 
-from .classifier.metricsfactory import MetricsFactory
+from metrics.metricsfactory import MetricsFactory
 
 class KNNClassifierDialog(QDialog):
     def __init__(self, parent, data):

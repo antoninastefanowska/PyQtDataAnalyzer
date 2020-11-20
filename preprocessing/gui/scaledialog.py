@@ -3,8 +3,8 @@ from PyQt5.QtWidgets import QDialog, QComboBox, QLineEdit
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtGui import QDoubleValidator
 
-from .namegenerator import NameGenerator
-from .columnprocessor import ColumnProcessor
+from preprocessing.utils.namegenerator import NameGenerator
+from preprocessing.columnprocessor import ColumnProcessor
 
 class ScaleDialog(QDialog):
     def __init__(self, parent, data):

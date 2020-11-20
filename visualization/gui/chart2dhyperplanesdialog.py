@@ -1,5 +1,5 @@
 from .chart2ddialog import Chart2DDialog
-from classification.hyperplane.classifier.hyperplaneclassifier import HyperplaneClassifier
+from classification.hyperplane.hyperplaneclassifier import HyperplaneClassifier
 
 class Chart2DHyperplanesDialog(Chart2DDialog):
     def __init__(self, parent, data, chart):

@@ -1,4 +1,4 @@
-from ..testingresultwindow import TestingResultWindow
+from classification.gui.testingresultwindow import TestingResultWindow
 
 class TestingManager:
     def __init__(self, context, data, class_column_name):
