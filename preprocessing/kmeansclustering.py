@@ -1,5 +1,4 @@
 import pandas as pd
-import numpy as np
 from random import uniform
 
 class KMeansClustering:
@@ -29,34 +28,22 @@ class KMeansClustering:
         centroids = {}
         centroid = self.data.sample(n=1).iloc[0]
         centroids[1] = centroid
-        probabilities = []
 
-        sum_square_distance = 0
-        for index, row in self.data.iterrows():
-            distance = self.metrics.get_distance(row, centroid)
-            square_distance = distance ** 2
-            sum_square_distance += square_distance
-            probabilities.append(square_distance / sum_square_distance)
+        calculations = pd.DataFrame()
+        calculations["square_distance"] = self.data.apply(lambda row: self.get_cluster(row, centroids)["distance"] ** 2, axis=1)
+        sum = calculations["square_distance"].sum()
+        calculations["probability"] = calculations.apply(lambda row: row["square_distance"] / sum, axis=1)
 
-        probabilities = np.array(probabilities)
-        centroid = self.data.sample(n=1, weights=probabilities).iloc[0]
+        centroid = self.data.sample(n=1, weights=calculations["probability"]).iloc[0]
         centroids[2] = centroid
+        for i in range(3, self.k + 1):
+            calculations["square_distance"] = self.data.apply(lambda row: self.get_cluster(row, centroids)["distance"] ** 2, axis=1)
+            sum = calculations["square_distance"].sum()
+            calculations["probability"] = calculations.apply(lambda row: row["square_distance"] / sum, axis=1)
 
-        labeled_data = pd.DataFrame()
-        for i in range(2, self.k):
-            labeled_data["distance"] = self.data.apply(lambda row: self.get_label(row, centroids)["distance"], axis=1)
-            probabilities = []
-            sum_square_distance = 0
-            for index, row in self.data.iterrows():
-                distance = self.metrics.get_distance(row, centroid)
-                square_distance_new = distance ** 2
-                square_distance = labeled_data.iloc[index]["distance"] ** 2
-                sum_square_distance += square_distance
-                probabilities.append(square_distance_new / sum_square_distance)
+            centroid = self.data.sample(n=1, weights=calculations["probability"]).iloc[0]
+            centroids[i] = centroid
 
-            probabilities = np.array(probabilities)
-            centroid = self.data.sample(n=1, weights=probabilities).iloc[0]
-            centroids[i + 1] = centroid
         return centroids
 
     def mean_centroids(self, centroids, labeled_data):
@@ -71,17 +58,17 @@ class KMeansClustering:
             centroids[i] = pd.Series(centroid)
         return centroids
 
-    def get_label(self, row, centroids):
+    def get_cluster(self, row, centroids):
         distances = [{"distance": self.metrics.get_distance(row, centroids[key]), "label": key} for key in centroids.keys()]
-        min_distance = min(distances, key=lambda x: x["distance"])
-        return min_distance
+        cluster = min(distances, key=lambda x: x["distance"])
+        return cluster
 
     def k_means(self):
         centroids = self.initial_centroids()
         labeled_data = self.data.copy()
         last_labels = None
         while True:
-            labeled_data["cluster"] = self.data.apply(lambda row: self.get_label(row, centroids)["label"], axis=1)
+            labeled_data["cluster"] = self.data.apply(lambda row: self.get_cluster(row, centroids)["label"], axis=1)
             if last_labels is not None and labeled_data["cluster"].equals(last_labels):
                 break
             last_labels = labeled_data["cluster"]
