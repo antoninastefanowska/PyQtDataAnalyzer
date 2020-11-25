@@ -1,12 +1,12 @@
 import pandas as pd
 
 from classification.classifier import Classifier
-from .vector import Vector
+from .hyperplane import Hyperplane
 
 class HyperplaneClassifier(Classifier):
     def __init__(self, data, class_column_name):
         super().__init__(data, class_column_name)
-        self.vectors = []
+        self.hyperplanes = []
         self.removed_count = 0
 
     def prepare(self):
@@ -26,17 +26,17 @@ class HyperplaneClassifier(Classifier):
 
                 if len(separated_negative) > max:
                     max = len(separated_negative)
-                    max_vector = Vector(0, point_negative, column_name, class_negative)
+                    max_hyperplane = Hyperplane(0, point_negative, column_name, class_negative)
                     max_removed = removed_negative
                     max_separated_data = separated_negative
 
                 if len(separated_positive) > max:
                     max = len(separated_positive)
-                    max_vector = Vector(1, point_positive, column_name, class_positive)
+                    max_hyperplane = Hyperplane(1, point_positive, column_name, class_positive)
                     max_removed = removed_positive
                     max_separated_data = separated_positive
 
-            self.vectors.append(max_vector)
+            self.hyperplanes.append(max_hyperplane)
             self.removed_count += max_removed
             current_data = current_data.drop([row.name for row in max_separated_data])
 
@@ -75,19 +75,19 @@ class HyperplaneClassifier(Classifier):
         return separated, point, class_value, removed_count
 
     def classify(self, data_object):
-        for vector in self.vectors:
+        for vector in self.hyperplanes:
             if vector.in_area(data_object):
                 return vector.class_value
 
     def get_vectorized_data(self):
         column_names = []
-        for i in range(1, len(self.vectors) + 1):
+        for i in range(1, len(self.hyperplanes) + 1):
             column_names.append("v" + str(i))
         column_names.append(self.class_column_name)
 
         vectorized_dict = {}
         i = 0
-        for vector in self.vectors:
+        for vector in self.hyperplanes:
             column = []
             for index, row in self.data.iterrows():
                 column.append(int(vector.in_area(row)))
@@ -105,4 +105,4 @@ class HyperplaneClassifier(Classifier):
         return ""
 
     def get_result_info_string(self):
-        return "Długość wektora: " + str(len(self.vectors)) + "\nLiczba usuniętych wartości: " + str(self.removed_count)
+        return "Długość wektora: " + str(len(self.hyperplanes)) + "\nLiczba usuniętych wartości: " + str(self.removed_count)

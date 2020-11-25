@@ -131,7 +131,7 @@ class MainWindow(QMainWindow):
         chart = chart_canvas.get_subplot(0)
         dialog = Chart2DHyperplanesDialog(self, self.data, chart)
         if dialog.exec_():
-            chart_window = ChartWindow(self, chart_canvas, dialog.vectors, dialog.xlims, dialog.ylims)
+            chart_window = ChartWindow(self, chart_canvas, dialog.hyperplanes, dialog.xlims, dialog.ylims)
             chart_window.show()
 
     @pyqtSlot()

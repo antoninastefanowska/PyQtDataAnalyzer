@@ -1,4 +1,4 @@
-class Vector:
+class Hyperplane:
     def __init__(self, orientation, point, column_name, class_value):
         self.orientation = orientation
         self.point = point
