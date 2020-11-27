@@ -12,7 +12,7 @@ class MetricsFactory:
     @staticmethod
     def get_by_name(name, data):
         index = MetricsFactory.NAMES.index(name)
-        return MetricsFactory.get_by_id(index, data,)
+        return MetricsFactory.get_by_id(index, data)
 
     @staticmethod
     def get_by_id(id, data):

@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import QDialog, QComboBox, QLineEdit
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtGui import QIntValidator
 
-from preprocessing.columnprocessor import ColumnProcessor
+from ..columnanalyzer import ColumnAnalyzer
 
 class HighlightDialog(QDialog):
     def __init__(self, parent, data):
@@ -32,8 +32,8 @@ class HighlightDialog(QDialog):
         smallest_percent = int(smallest_textbox.text())
         biggest_percent = int(biggest_textbox.text())
 
-        processor = ColumnProcessor(column)
-        self.smallest_indexes, self.biggest_indexes = processor.get_extremes_indexes(smallest_percent, biggest_percent)
+        analyzer = ColumnAnalyzer(column)
+        self.smallest_indexes, self.biggest_indexes = analyzer.get_extremes_indexes(smallest_percent, biggest_percent)
 
     @pyqtSlot()
     def accept(self):

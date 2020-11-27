@@ -14,9 +14,18 @@
         "preprocessing/gui/normalizedialog.py",
         "preprocessing/gui/normalizealldialog.py",
         "preprocessing/gui/scaledialog.py",
-        "preprocessing/gui/highlightdialog.py",
         "preprocessing/gui/classcolumndialog.py",
         "preprocessing/gui/clusteranalysisdialog.py",
+
+        "analysis/columnanalyzer.py",
+        "analysis/similarity/similaritymetrics.py",
+        "analysis/similarity/similarityfactory.py",
+        "analysis/similarity/jaccardsimilarity.py",
+        "analysis/similarity/dicesimilarity.py",
+        "analysis/similarity/smcsimilarity.py",
+        "analysis/gui/highlightdialog.py",
+        "analysis/gui/comparecolumnsdialog.py",
+        "analysis/gui/comparecolumnsresultwindow.py",
 
         "visualization/gui/chart2ddialog.py",
         "visualization/gui/chart3ddialog.py",
@@ -71,6 +80,8 @@
         "ui/classificationresultwindow.ui",
         "ui/testingresultwindow.ui",
         "ui/progresswindow.ui",
-        "ui/clusteranalysisdialog.ui"
+        "ui/clusteranalysisdialog.ui",
+        "ui/comparecolumnsdialog.ui",
+        "ui/comparecolumnsresultwindow.ui"
     ]
 }

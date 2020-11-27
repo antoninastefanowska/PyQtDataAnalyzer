@@ -4,15 +4,21 @@ class ColumnProcessor:
     def __init__(self, column):
         self.column = column
 
-    def text_to_numbers(self, alphabetically):
+    def text_to_numbers(self, method="alphabetically", cluster_column=None):
         strings = self.column.unique()
-        if alphabetically:
-            strings.sort()
-        counter = 0
         dictionary = {}
-        for value in strings:
-            counter += 1
-            dictionary[value] = counter
+        if method == "by_cluster":
+            for value in strings:
+                class_indices = self.column[self.column == value].index
+                matching_clusters = cluster_column.take(class_indices)
+                dictionary[value] = matching_clusters.mode().iloc[0]
+        else:
+            if method == "alphabetically":
+                strings.sort()
+            counter = 0
+            for value in strings:
+                counter += 1
+                dictionary[value] = counter
         return self.column.map(dictionary)
 
     def discretize(self, bar_number):
@@ -33,13 +39,3 @@ class ColumnProcessor:
         min = self.column.min()
         max = self.column.max()
         return self.column.map(lambda value: round((b - a) * (value - min) / (max - min) + a, 4))
-
-    def get_extremes_indexes(self, smallest_percent, biggest_percent):
-        count = self.column.count()
-        smallest_number = int(round(smallest_percent / 100 * count))
-        biggest_number = int(round(biggest_percent / 100 * count))
-        column = self.column.sort_values()
-
-        smallest_indexes = column.index[:smallest_number]
-        biggest_indexes = column.index[-biggest_number:]
-        return smallest_indexes, biggest_indexes

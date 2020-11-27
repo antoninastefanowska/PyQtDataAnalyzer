@@ -14,7 +14,9 @@ class TextToNumberDialog(QDialog):
     def load_ui(self):
         uic.loadUi("ui/texttonumberdialog.ui", self)
         column_name_combobox = self.findChild(QComboBox, "columnNameCombobox")
+        cluster_column_combobox = self.findChild(QComboBox, "clusterColumnCombobox")
         column_name_combobox.addItems(self.data.columns)
+        cluster_column_combobox.addItems(self.data.columns)
 
     def text_to_number(self):
         column_name_combobox = self.findChild(QComboBox, "columnNameCombobox")
@@ -22,11 +24,23 @@ class TextToNumberDialog(QDialog):
         column = self.data[column_name]
 
         alphabetically_radio_button = self.findChild(QRadioButton, "alphabeticallyRadioButton")
-        alphabetically = alphabetically_radio_button.isChecked()
+        by_order_radio_button = self.findChild(QRadioButton, "byOrderRadioButton")
+        by_cluster_radio_button = self.findChild(QRadioButton, "byClusterRadioButton")
 
-        processor = ColumnProcessor(column)
         name = NameGenerator.get_name(self.data.columns, column_name, "_numeryczne")
-        self.data[name] = processor.text_to_numbers(alphabetically)
+        processor = ColumnProcessor(column)
+
+        if alphabetically_radio_button.isChecked():
+            self.data[name] = processor.text_to_numbers("alphabetically")
+
+        elif by_order_radio_button.isChecked():
+            self.data[name] = processor.text_to_numbers("by_order")
+
+        elif by_cluster_radio_button.isChecked():
+            cluster_column_combobox = self.findChild(QComboBox, "clusterColumnCombobox")
+            cluster_column_name = cluster_column_combobox.currentText()
+            cluster_column = self.data[cluster_column_name]
+            self.data[name] = processor.text_to_numbers("by_cluster", cluster_column)
 
     @pyqtSlot()
     def accept(self):

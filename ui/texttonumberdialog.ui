@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>320</width>
-    <height>240</height>
+    <height>244</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -59,6 +59,27 @@
           </property>
          </widget>
         </item>
+        <item>
+         <widget class="QRadioButton" name="byClusterRadioButton">
+          <property name="text">
+           <string>Na bazie klastra</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_2">
+          <property name="text">
+           <string>Kolumna klastrów:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QComboBox" name="clusterColumnCombobox">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
        </layout>
       </widget>
      </item>
@@ -98,8 +119,8 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>248</x>
-     <y>254</y>
+     <x>257</x>
+     <y>230</y>
     </hint>
     <hint type="destinationlabel">
      <x>157</x>
@@ -114,12 +135,28 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>316</x>
-     <y>260</y>
+     <x>310</x>
+     <y>230</y>
     </hint>
     <hint type="destinationlabel">
      <x>286</x>
      <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>byClusterRadioButton</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>clusterColumnCombobox</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>103</x>
+     <y>134</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>167</x>
+     <y>170</y>
     </hint>
    </hints>
   </connection>

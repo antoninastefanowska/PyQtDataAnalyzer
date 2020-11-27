@@ -48,7 +48,6 @@
     <addaction name="actionDiscretize"/>
     <addaction name="actionNormalize"/>
     <addaction name="actionScale"/>
-    <addaction name="actionHighlightEndValues"/>
     <addaction name="actionRemove"/>
     <addaction name="separator"/>
     <addaction name="actionNormalizeAll"/>
@@ -100,8 +99,16 @@
     <addaction name="menuTestuj_klasyfikacj"/>
     <addaction name="menuTestuj_wp_yw_parametr_w"/>
    </widget>
+   <widget class="QMenu" name="menuAnaliza">
+    <property name="title">
+     <string>Analiza</string>
+    </property>
+    <addaction name="actionHighlightEndValues"/>
+    <addaction name="actionCompareColumns"/>
+   </widget>
    <addaction name="menuPlik"/>
    <addaction name="menuDane"/>
+   <addaction name="menuAnaliza"/>
    <addaction name="menuWizualizacja"/>
    <addaction name="menuKlasyfikacja"/>
   </widget>
@@ -168,7 +175,7 @@
   </action>
   <action name="actionRemove">
    <property name="text">
-    <string>Usuń zaznaczoną kolumnę</string>
+    <string>Usuń zaznaczone kolumny</string>
    </property>
   </action>
   <action name="actionTestKNNParameters">
@@ -214,6 +221,11 @@
   <action name="actionClusterAnalysis">
    <property name="text">
     <string>Analiza skupień</string>
+   </property>
+  </action>
+  <action name="actionCompareColumns">
+   <property name="text">
+    <string>Porównaj kolumny</string>
    </property>
   </action>
  </widget>
@@ -541,9 +553,25 @@
   </connection>
   <connection>
    <sender>actionClusterAnalysis</sender>
-   <signal>triggered(bool)</signal>
+   <signal>triggered()</signal>
    <receiver>MainWindow</receiver>
    <slot>cluster_analysis()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionCompareColumns</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>compare_columns()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>

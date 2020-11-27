@@ -10,8 +10,11 @@ from preprocessing.gui.discretizedialog import DiscretizeDialog
 from preprocessing.gui.normalizedialog import NormalizeDialog
 from preprocessing.gui.normalizealldialog import NormalizeAllDialog
 from preprocessing.gui.scaledialog import ScaleDialog
-from preprocessing.gui.highlightdialog import HighlightDialog
 from preprocessing.gui.classcolumndialog import ClassColumnDialog
+
+from analysis.gui.highlightdialog import HighlightDialog
+from analysis.gui.comparecolumnsdialog import CompareColumnsDialog
+from analysis.gui.comparecolumnsresultwindow import CompareColumnsResultWindow
 
 from visualization.gui.chart2ddialog import Chart2DDialog
 from visualization.gui.chart3ddialog import Chart3DDialog
@@ -244,3 +247,15 @@ class MainWindow(QMainWindow):
         dialog = ClusterAnalysisDialog(self, self.data)
         if dialog.exec_():
             self.table_model.layoutChanged.emit()
+
+    @pyqtSlot()
+    def compare_columns(self):
+        dialog = CompareColumnsDialog(self, self.data)
+        if dialog.exec_():
+            column1_name = dialog.column1_name
+            column2_name = dialog.column2_name
+            similarity_metrics_name = dialog.similarity_metrics_name
+            result = dialog.result
+
+            result_window = CompareColumnsResultWindow(self, column1_name, column2_name, result, similarity_metrics_name)
+            result_window.show()
