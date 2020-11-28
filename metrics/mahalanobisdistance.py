@@ -23,8 +23,13 @@ class MahalanobisDistance(DistanceMetrics):
             self.inv_cov_matrix = np.linalg.pinv(cov_matrix)
 
     def get_distance(self, data_object1, data_object2):
-        vec1 = data_object1.values
-        vec2 = data_object2.values
+        if isinstance(data_object1, np.ndarray) and isinstance(data_object2, np.ndarray):
+            vec1 = data_object1
+            vec2 = data_object2
+        else:
+            vec1 = data_object1.values
+            vec2 = data_object2.values
+
         self.remove_strings(vec1)
         self.remove_strings(vec2)
 

@@ -257,5 +257,5 @@ class MainWindow(QMainWindow):
             similarity_metrics_name = dialog.similarity_metrics_name
             result = dialog.result
 
-            result_window = CompareColumnsResultWindow(self, column1_name, column2_name, result, similarity_metrics_name)
+            result_window = CompareColumnsResultWindow(self, column1_name, column2_name, result, "Miara: " + similarity_metrics_name)
             result_window.show()

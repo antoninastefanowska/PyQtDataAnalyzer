@@ -5,5 +5,5 @@ class DiceSimilarity(SimilarityMetrics):
         pass
 
     def get_similarity(self, column1, column2):
-        matching_count = self.get_matching_count(column1, column2)
-        return 2 * matching_count / (2 * column1.count())
+        intersection_count = self.get_intersection_count(column1, column2)
+        return 2 * intersection_count / (column1.count() + column2.count())

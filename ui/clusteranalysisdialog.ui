@@ -5,12 +5,15 @@
   <property name="windowModality">
    <enum>Qt::ApplicationModal</enum>
   </property>
+  <property name="enabled">
+   <bool>true</bool>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
     <width>320</width>
-    <height>307</height>
+    <height>376</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -59,17 +62,40 @@
       <widget class="QComboBox" name="metricsNameCombobox"/>
      </item>
      <item>
-      <widget class="QLabel" name="label_3">
-       <property name="text">
-        <string>Wartość K:</string>
+      <widget class="QGroupBox" name="groupBox_2">
+       <property name="title">
+        <string>Wartość K</string>
        </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLineEdit" name="kValueTextbox">
-       <property name="text">
-        <string>3</string>
-       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_5">
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_4">
+          <item>
+           <widget class="QRadioButton" name="chosenValueRadiobutton">
+            <property name="text">
+             <string>Wybrana</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="kValueTextbox">
+            <property name="text">
+             <string>3</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="optimalValueRadiobutton">
+            <property name="text">
+             <string>Optymalna</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
       </widget>
      </item>
      <item>
@@ -129,8 +155,8 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>248</x>
-     <y>254</y>
+     <x>257</x>
+     <y>325</y>
     </hint>
     <hint type="destinationlabel">
      <x>157</x>
@@ -145,12 +171,28 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>316</x>
-     <y>260</y>
+     <x>310</x>
+     <y>325</y>
     </hint>
     <hint type="destinationlabel">
      <x>286</x>
      <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>chosenValueRadiobutton</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>kValueTextbox</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>103</x>
+     <y>188</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>178</x>
+     <y>211</y>
     </hint>
    </hints>
   </connection>
