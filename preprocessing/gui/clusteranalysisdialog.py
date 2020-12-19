@@ -33,7 +33,6 @@ class ClusterAnalysisDialog(QDialog):
         metrics_name_combobox = self.findChild(QComboBox, "metricsNameCombobox")
         initialization_method_combobox = self.findChild(QComboBox, "initializationMethodCombobox")
         chosen_value_radiobutton = self.findChild(QRadioButton, "chosenValueRadiobutton")
-        optimal_value_radiobutton = self.findChild(QRadioButton, "optimalValueRadiobutton")
 
         start_column_name = start_column_name_combobox.currentText()
         end_column_name = end_column_name_combobox.currentText()

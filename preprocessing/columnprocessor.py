@@ -11,14 +11,30 @@ class ColumnProcessor:
             for value in strings:
                 class_indices = self.column[self.column == value].index
                 matching_clusters = cluster_column.take(class_indices)
-                dictionary[value] = matching_clusters.mode().iloc[0]
+                if matching_clusters.count() > 0:
+                    label = matching_clusters.mode().iloc[0]
+                    while label in dictionary.values():
+                        matching_clusters = matching_clusters.drop(matching_clusters[matching_clusters == label].index)
+                        if matching_clusters.count() > 0:
+                            label = matching_clusters.mode().iloc[0]
+                        else:
+                            label = None
+                            break
+                    dictionary[value] = label
+
+            for value in strings:
+                if dictionary[value] is None:
+                    label = 1
+                    while label in dictionary.values():
+                        label += 1
+                    dictionary[value] = label
         else:
             if method == "alphabetically":
                 strings.sort()
-            counter = 0
+            label = 0
             for value in strings:
-                counter += 1
-                dictionary[value] = counter
+                label += 1
+                dictionary[value] = label
         return self.column.map(dictionary)
 
     def discretize(self, bar_number):

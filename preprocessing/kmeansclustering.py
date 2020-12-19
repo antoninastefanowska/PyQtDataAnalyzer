@@ -61,11 +61,6 @@ class KMeansClustering:
             centroids[i] = pd.Series(centroid)
         return centroids
 
-    def get_cluster(self, row, centroids):
-        distances = [{"distance": self.metrics.get_distance(row, centroids[key]), "label": key} for key in centroids.keys()]
-        cluster = min(distances, key=lambda x: x["distance"])
-        return cluster
-
     def calculate_distance_sums(self, labeled_data):
         self.distance_sums = {}
         for k in range(1, self.k + 1):
@@ -112,6 +107,11 @@ class KMeansClustering:
             if max < silhouette_mean:
                 max = silhouette_mean
         return max
+
+    def get_cluster(self, row, centroids):
+        distances = [{"distance": self.metrics.get_distance(row, centroids[key]), "label": key} for key in centroids.keys()]
+        cluster = min(distances, key=lambda x: x["distance"])
+        return cluster
 
     def k_means(self):
         centroids = self.initial_centroids()
