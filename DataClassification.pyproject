@@ -5,6 +5,8 @@
 
         "data/tablemodel.py",
         "data/loaddatadialog.py",
+        "data/classifiertreemodel.py",
+        "data/classifiertreenode.py",
 
         "preprocessing/columnprocessor.py",
         "preprocessing/kmeansclustering.py",
@@ -60,6 +62,7 @@
 
         "classification/gui/newobjectdialog.py",
         "classification/gui/classificationresultwindow.py",
+        "classification/gui/classifiertableoutputwindow.py",
         "classification/gui/testingresultwindow.py",
         "classification/gui/progresswindow.py",
 
@@ -78,6 +81,7 @@
         "ui/newobjectdialog.ui",
         "ui/knnclassifierdialog.ui",
         "ui/classificationresultwindow.ui",
+        "ui/classifiertableoutputwindow.ui"
         "ui/testingresultwindow.ui",
         "ui/progresswindow.ui",
         "ui/clusteranalysisdialog.ui",

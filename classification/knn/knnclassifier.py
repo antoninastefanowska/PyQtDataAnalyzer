@@ -18,6 +18,15 @@ class KNNClassifier(Classifier):
     def get_result_info_string(self):
         return "K: " + str(self.k) + "\nMetryka: " + self.metrics.get_name()
 
+    def get_param_list(self):
+        params = []
+        params.append(("K", str(self.k)))
+        params.append(("Metryka", self.metrics.get_name()))
+        return params
+
+    def get_name(self):
+        return "KNN"
+
     def classify(self, data_object):
         data_objects = []
         for index, row in self.data.iterrows():

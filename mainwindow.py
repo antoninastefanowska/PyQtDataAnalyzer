@@ -1,6 +1,6 @@
 from PyQt5 import uic
-from PyQt5.QtWidgets import QMainWindow, QFileDialog, QTableView
-from PyQt5.QtCore import pyqtSlot
+from PyQt5.QtWidgets import QMainWindow, QFileDialog, QTableView, QTreeView
+from PyQt5.QtCore import pyqtSlot, QPoint
 
 from data.tablemodel import TableModel
 from data.loaddatadialog import LoadDataDialog
@@ -32,19 +32,38 @@ from classification.hyperplane.utils.hyperplanetestingmanager import HyperplaneT
 
 from classification.gui.newobjectdialog import NewObjectDialog
 from classification.gui.classificationresultwindow import ClassificationResultWindow
+from classification.gui.classifiertableoutputwindow import ClassifierTableOutputWindow
 
 from preprocessing.gui.clusteranalysisdialog import ClusterAnalysisDialog
+
+from data.classifiertreemodel import ClassifierTreeModel
 
 class MainWindow(QMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
         self.data = None
         self.table_model = None
-        self.load_ui()
         self.testing_manager = None
+
+        self.classifier_tree_model = ClassifierTreeModel(self)
+
+        self.load_ui()
 
     def load_ui(self):
         uic.loadUi("ui/mainwindow.ui", self)
+        classifier_tree_view = self.findChild(QTreeView, "classifierTreeView")
+        classifier_tree_view.setModel(self.classifier_tree_model)
+
+    @pyqtSlot(QPoint)
+    def open_classifier_menu(self, position):
+        classifier_tree_view = self.findChild(QTreeView, "classifierTreeView")
+        indexes = classifier_tree_view.selectedIndexes()
+        if len(indexes) > 0:
+            index = indexes[0]
+            node = index.internalPointer()
+            menu = node.menu
+            if menu:
+                menu.exec_(classifier_tree_view.viewport().mapToGlobal(position))
 
     @pyqtSlot()
     def open_file(self):
@@ -147,56 +166,46 @@ class MainWindow(QMainWindow):
             chart_window.show()
 
     @pyqtSlot()
-    def classify_knn_method_create(self):
+    def create_knn_classifier(self):
         dialog = KNNClassifierDialog(self, self.data)
         if dialog.exec_():
             class_column_name = dialog.class_column_name
             metrics = dialog.metrics
             k_value = dialog.k_value
-            new_object_dialog = NewObjectDialog(self, self.data, class_column_name)
-
-            if new_object_dialog.exec_():
-                new_object = new_object_dialog.new_object
-                classifier = KNNClassifier(self.data, class_column_name, metrics, k_value)
-                result_window = ClassificationResultWindow(self, new_object, classifier)
-                result_window.show()
+            classifier = KNNClassifier(self.data, class_column_name, metrics, k_value)
+            classifier.prepare()
+            self.classifier_tree_model.add_classifier(classifier)
+            self.classifier_tree_model.layoutChanged.emit()
+            classifier_tree_view = self.findChild(QTreeView, "classifierTreeView")
+            classifier_tree_view.setColumnWidth(0, 200)
 
     @pyqtSlot()
-    def classify_knn_method_load(self):
-        dialog = KNNClassifierDialog(self, self.data)
+    def create_hyperplane_classifier(self):
+        dialog = ClassColumnDialog(self, self.data)
         if dialog.exec_():
             class_column_name = dialog.class_column_name
-            metrics = dialog.metrics
-            k_value = dialog.k_value
+            classifier = HyperplaneClassifier(self.data, class_column_name)
+            classifier.prepare()
+            self.classifier_tree_model.add_classifier(classifier)
+            self.classifier_tree_model.layoutChanged.emit()
+            classifier_tree_view = self.findChild(QTreeView, "classifierTreeView")
+            classifier_tree_view.setColumnWidth(0, 200)
 
-            filename, _ = QFileDialog.getOpenFileName(self, "Otwórz...", "", "Wszystkie pliki (*);;Pliki CSV (*.csv);;Pliki tekstowe (*.txt)", options=QFileDialog.Options())
-            if filename:
-                dialog = LoadDataDialog(self, filename)
-                if dialog.exec_():
-                    columns = self.data.columns
-                    columns = columns[columns != class_column_name]
-                    loaded_data = dialog.data
-                    loaded_data.columns = columns
-                    new_object = loaded_data.iloc[0]
-                    classifier = KNNClassifier(self.data, class_column_name, metrics, k_value)
-                result_window = ClassificationResultWindow(self, new_object, classifier)
-                result_window.show()
+    def show_classifier_table_output(self, classifier):
+        window = ClassifierTableOutputWindow(self, classifier.get_classifier_output_data())
+        window.show()
 
-    @pyqtSlot()
-    def classify_hyperplane_method_create(self):
+    def classify_new_object(self, classifier):
         dialog = ClassColumnDialog(self, self.data)
         if dialog.exec_():
             class_column_name = dialog.class_column_name
             new_object_dialog = NewObjectDialog(self, self.data, class_column_name)
-
             if new_object_dialog.exec_():
                 new_object = new_object_dialog.new_object
-                classifier = HyperplaneClassifier(self.data, class_column_name)
                 result_window = ClassificationResultWindow(self, new_object, classifier)
                 result_window.show()
 
-    @pyqtSlot()
-    def classify_hyperplane_method_load(self):
+    def classify_loaded_object(self, classifier):
         dialog = ClassColumnDialog(self, self.data)
         if dialog.exec_():
             class_column_name = dialog.class_column_name
@@ -210,9 +219,8 @@ class MainWindow(QMainWindow):
                     loaded_data = dialog.data
                     loaded_data.columns = columns
                     new_object = loaded_data.iloc[0]
-                    classifier = HyperplaneClassifier(self.data, class_column_name)
-                result_window = ClassificationResultWindow(self, new_object, classifier)
-                result_window.show()
+                    result_window = ClassificationResultWindow(self, new_object, classifier)
+                    result_window.show()
 
     @pyqtSlot()
     def test_knn_method(self):

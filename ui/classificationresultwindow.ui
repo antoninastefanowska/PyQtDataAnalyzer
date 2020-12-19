@@ -78,46 +78,7 @@
    </layout>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
-  <widget class="QMenuBar" name="menuBar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>320</width>
-     <height>21</height>
-    </rect>
-   </property>
-   <widget class="QMenu" name="menuPlik">
-    <property name="title">
-     <string>Plik</string>
-    </property>
-    <addaction name="actionExportClassifierData"/>
-   </widget>
-   <addaction name="menuPlik"/>
-  </widget>
-  <action name="actionExportClassifierData">
-   <property name="text">
-    <string>Eksportuj dane klasyfikatora...</string>
-   </property>
-  </action>
  </widget>
  <resources/>
- <connections>
-  <connection>
-   <sender>actionExportClassifierData</sender>
-   <signal>triggered()</signal>
-   <receiver>ClassificationResultWindow</receiver>
-   <slot>export_classifier_data()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>159</x>
-     <y>119</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

@@ -106,3 +106,12 @@ class HyperplaneClassifier(Classifier):
 
     def get_result_info_string(self):
         return "Długość wektora: " + str(len(self.hyperplanes)) + "\nLiczba usuniętych wartości: " + str(self.removed_count)
+
+    def get_param_list(self):
+        params = []
+        params.append(("Długość wektora", str(len(self.hyperplanes))))
+        params.append(("Usunięte", str(self.removed_count)))
+        return params
+
+    def get_name(self):
+        return "Hiperpłaszczyzny"

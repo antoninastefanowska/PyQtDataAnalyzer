@@ -20,6 +20,14 @@ class Classifier(ABC):
     def get_result_info_string(self):
         pass
 
+    @abstractmethod
+    def get_param_list(self):
+        pass
+
+    @abstractmethod
+    def get_name(self):
+        pass
+
     def set_parameter(self, parameter):
         pass
 

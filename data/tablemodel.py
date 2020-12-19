@@ -1,3 +1,5 @@
+import pandas as pd
+
 from PyQt5.QtCore import QAbstractTableModel, Qt, QVariant
 from PyQt5.QtGui import QColor
 
@@ -6,7 +8,7 @@ class TableModel(QAbstractTableModel):
         super().__init__(parent)
         self.green_rows = None
         self.red_rows = None
-        self.data = data
+        self.data = data if data is not None else pd.DataFrame()
 
     def rowCount(self, parent=None):
         return len(self.data.values)

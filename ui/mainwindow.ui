@@ -14,7 +14,17 @@
    <string>Data Classification</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QHBoxLayout" name="horizontalLayout_2">
+   <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,3">
+    <item>
+     <widget class="QTreeView" name="classifierTreeView">
+      <property name="contextMenuPolicy">
+       <enum>Qt::CustomContextMenu</enum>
+      </property>
+      <property name="headerHidden">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
     <item>
      <widget class="QTableView" name="tableView">
       <property name="frameShadow">
@@ -79,23 +89,14 @@
      </property>
      <addaction name="actionTestKNNParameters"/>
     </widget>
-    <widget class="QMenu" name="menuMetoda_KNN">
+    <widget class="QMenu" name="menuUtw_rz_klasyfikator">
      <property name="title">
-      <string>Metoda KNN</string>
+      <string>Zbuduj klasyfikator</string>
      </property>
-     <addaction name="actionKNNMethodCreate"/>
-     <addaction name="actionKNNMethodLoad"/>
+     <addaction name="actionCreateKNNClassifier"/>
+     <addaction name="actionCreateHyperplaneClassifier"/>
     </widget>
-    <widget class="QMenu" name="menuMetoda_hiperp_aszczyzn">
-     <property name="title">
-      <string>Metoda hiperpłaszczyzn</string>
-     </property>
-     <addaction name="actionHyperplaneMethodCreate"/>
-     <addaction name="actionHyperplaneMethodLoad"/>
-    </widget>
-    <addaction name="menuMetoda_KNN"/>
-    <addaction name="menuMetoda_hiperp_aszczyzn"/>
-    <addaction name="separator"/>
+    <addaction name="menuUtw_rz_klasyfikator"/>
     <addaction name="menuTestuj_klasyfikacj"/>
     <addaction name="menuTestuj_wp_yw_parametr_w"/>
    </widget>
@@ -170,7 +171,7 @@
   </action>
   <action name="actionTestKNNMethod">
    <property name="text">
-    <string>Metoda KNN</string>
+    <string>KNN</string>
    </property>
   </action>
   <action name="actionRemove">
@@ -180,7 +181,7 @@
   </action>
   <action name="actionTestKNNParameters">
    <property name="text">
-    <string>Metoda KNN</string>
+    <string>KNN</string>
    </property>
   </action>
   <action name="actionNormalizeAll">
@@ -195,27 +196,7 @@
   </action>
   <action name="actionTestHyperplanesMethod">
    <property name="text">
-    <string>Metoda hiperpłaszczyzn</string>
-   </property>
-  </action>
-  <action name="actionKNNMethodCreate">
-   <property name="text">
-    <string>Utwórz nowy obiekt</string>
-   </property>
-  </action>
-  <action name="actionKNNMethodLoad">
-   <property name="text">
-    <string>Załaduj nowy obiekt</string>
-   </property>
-  </action>
-  <action name="actionHyperplaneMethodCreate">
-   <property name="text">
-    <string>Utwórz nowy obiekt</string>
-   </property>
-  </action>
-  <action name="actionHyperplaneMethodLoad">
-   <property name="text">
-    <string>Załaduj nowy obiekt</string>
+    <string>Hiperpłaszczyzny</string>
    </property>
   </action>
   <action name="actionClusterAnalysis">
@@ -226,6 +207,16 @@
   <action name="actionCompareColumns">
    <property name="text">
     <string>Porównaj kolumny</string>
+   </property>
+  </action>
+  <action name="actionCreateKNNClassifier">
+   <property name="text">
+    <string>KNN</string>
+   </property>
+  </action>
+  <action name="actionCreateHyperplaneClassifier">
+   <property name="text">
+    <string>Hiperpłaszczyzny</string>
    </property>
   </action>
  </widget>
@@ -392,22 +383,6 @@
    </hints>
   </connection>
   <connection>
-   <sender>actionKNNMethodCreate</sender>
-   <signal>triggered()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>classify_knn_method_create()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>399</x>
-     <y>299</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>actionTestKNNMethod</sender>
    <signal>triggered()</signal>
    <receiver>MainWindow</receiver>
@@ -488,58 +463,10 @@
    </hints>
   </connection>
   <connection>
-   <sender>actionHyperplaneMethodCreate</sender>
-   <signal>triggered()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>classify_hyperplane_method_create()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>399</x>
-     <y>299</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>actionTestHyperplanesMethod</sender>
    <signal>triggered()</signal>
    <receiver>MainWindow</receiver>
    <slot>test_hyperplane_method()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>399</x>
-     <y>299</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>actionKNNMethodLoad</sender>
-   <signal>triggered()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>classify_knn_method_load()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>399</x>
-     <y>299</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>actionHyperplaneMethodLoad</sender>
-   <signal>triggered()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>classify_hyperplane_method_load()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
@@ -572,6 +499,54 @@
    <signal>triggered()</signal>
    <receiver>MainWindow</receiver>
    <slot>compare_columns()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionCreateKNNClassifier</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>create_knn_classifier()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>classifierTreeView</sender>
+   <signal>customContextMenuRequested(QPoint)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>open_classifier_menu(QPoint)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>105</x>
+     <y>300</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionCreateHyperplaneClassifier</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>create_hyperplane_classifier()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
