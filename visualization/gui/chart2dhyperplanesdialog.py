@@ -2,8 +2,8 @@ from .chart2ddialog import Chart2DDialog
 from classification.hyperplane.hyperplaneclassifier import HyperplaneClassifier
 
 class Chart2DHyperplanesDialog(Chart2DDialog):
-    def __init__(self, parent, data, chart):
-        super().__init__(parent, data, chart)
+    def __init__(self, parent, data, chart_canvas):
+        super().__init__(parent, data, chart_canvas)
         self.hyperplanes = None
         self.xlims = None
         self.ylims = None
@@ -22,4 +22,3 @@ class Chart2DHyperplanesDialog(Chart2DDialog):
         self.xlims = (x_min, x_max)
         self.ylims = (y_min, y_max)
         self.hyperplanes = hyperplane_classifier.hyperplanes
-        print(hyperplane_classifier.get_vectorized_data())

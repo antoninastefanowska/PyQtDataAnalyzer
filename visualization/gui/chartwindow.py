@@ -1,5 +1,5 @@
-from PyQt5 import uic, QtCore
-from PyQt5.QtCore import pyqtSlot
+from PyQt5 import uic
+from PyQt5.QtCore import pyqtSlot, Qt
 from PyQt5.QtWidgets import QMainWindow, QFileDialog, QVBoxLayout
 
 class ChartWindow(QMainWindow):
@@ -25,10 +25,10 @@ class ChartWindow(QMainWindow):
     @pyqtSlot()
     def keyPressEvent(self, event):
         if self.hyperplanes != None and len(self.hyperplanes) > 0:
-            if event.key() == QtCore.Qt.Key_Space:
+            if event.key() == Qt.Key_Space:
                 vector = self.hyperplanes.pop(0)
                 self.draw_hyperplane(vector)
-            elif event.key() == QtCore.Qt.Key_Return:
+            elif event.key() == Qt.Key_Return:
                 for vector in self.hyperplanes:
                     self.draw_hyperplane(vector)
 

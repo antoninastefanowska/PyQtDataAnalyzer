@@ -132,8 +132,7 @@ class MainWindow(QMainWindow):
     @pyqtSlot()
     def show_chart2d(self):
         chart_canvas = ChartCanvas(subplots=1)
-        chart = chart_canvas.get_subplot(0)
-        dialog = Chart2DDialog(self, self.data, chart)
+        dialog = Chart2DDialog(self, self.data, chart_canvas)
         if dialog.exec_():
             chart_window = ChartWindow(self, chart_canvas)
             chart_window.show()
@@ -141,8 +140,7 @@ class MainWindow(QMainWindow):
     @pyqtSlot()
     def show_chart3d(self):
         chart_canvas = ChartCanvas(subplots=1, projection="3d")
-        chart = chart_canvas.get_subplot(0)
-        dialog = Chart3DDialog(self, self.data, chart)
+        dialog = Chart3DDialog(self, self.data, chart_canvas)
         if dialog.exec_():
             chart_window = ChartWindow(self, chart_canvas)
             chart_window.show()
@@ -150,8 +148,7 @@ class MainWindow(QMainWindow):
     @pyqtSlot()
     def show_chart2d_hyperplanes(self):
         chart_canvas = ChartCanvas(subplots=1)
-        chart = chart_canvas.get_subplot(0)
-        dialog = Chart2DHyperplanesDialog(self, self.data, chart)
+        dialog = Chart2DHyperplanesDialog(self, self.data, chart_canvas)
         if dialog.exec_():
             chart_window = ChartWindow(self, chart_canvas, dialog.hyperplanes, dialog.xlims, dialog.ylims)
             chart_window.show()
@@ -194,6 +191,24 @@ class MainWindow(QMainWindow):
     def show_classifier_table_output(self, classifier):
         window = ClassifierTableOutputWindow(self, classifier.get_classifier_output_data())
         window.show()
+        if classifier.get_name() == "Hiperpłaszczyzny" and len(self.data.columns) == 3:
+            no_class_data = self.data.drop(classifier.class_column_name, axis=1)
+            x_column_name = no_class_data.columns[0]
+            y_column_name = no_class_data.columns[1]
+
+            x_min = no_class_data[x_column_name].min()
+            x_max = no_class_data[x_column_name].max()
+            y_min = no_class_data[y_column_name].min()
+            y_max = no_class_data[y_column_name].max()
+
+            xlims = (x_min, x_max)
+            ylims = (y_min, y_max)
+            hyperplanes = [hyperplane for hyperplane in classifier.hyperplanes]
+
+            chart_canvas = ChartCanvas(subplots=1)
+            chart_canvas.generate_2d_chart(self.data, classifier.class_column_name, x_column_name, y_column_name)
+            chart_window = ChartWindow(self, chart_canvas, hyperplanes, xlims, ylims)
+            chart_window.show()
 
     def classify_new_object(self, classifier):
         dialog = ClassColumnDialog(self, self.data)
