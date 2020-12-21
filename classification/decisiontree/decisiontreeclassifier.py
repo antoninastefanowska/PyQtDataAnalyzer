@@ -42,15 +42,15 @@ class DecisionTreeClassifier(Classifier):
         entropy = self.entropy(data)
         if entropy == 0:
             class_value = data[self.class_column_name].iloc[0]
-            return TreeNode(test_value=test_value, class_value=class_value)
+            return TreeNode(test_value=test_value, class_value=class_value, node_size=len(data))
 
         else:
             attribute = self.find_attribute(data, entropy)
+            class_value = data[self.class_column_name].mode().iloc[0]
             if attribute is None:
-                class_value = data[self.class_column_name].mode().iloc[0]
-                return TreeNode(test_value=test_value, class_value=class_value)
+                return TreeNode(test_value=test_value, class_value=class_value, node_size=len(data))
 
-            node = TreeNode(attribute, test_value)
+            node = TreeNode(attribute, test_value, class_value=class_value, node_size=len(data))
             values = np.sort(data[attribute].unique())
             for value in values:
                 data_part = data[data[attribute] == value]
@@ -58,8 +58,25 @@ class DecisionTreeClassifier(Classifier):
                 node.add_child(self.build_node(data_part, value))
             return node
 
+    def prune(self, tree):
+        class_value = None
+        homogenous = True
+        for child in tree.children:
+            self.prune(child)
+            if not child.children:
+                if class_value is None:
+                    class_value = child.class_value
+                elif class_value != child.class_value:
+                    homogenous = False
+            else:
+                homogenous = False
+        if tree.children and homogenous:
+            self.node_count -= tree.child_count()
+            tree.turn_to_leaf(class_value)
+
     def build(self):
         self.tree = self.build_node(self.data.copy(), None)
+        self.prune(self.tree)
 
     def update_data(self, data):
         super().update_data(data)

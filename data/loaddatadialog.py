@@ -1,5 +1,4 @@
 import pandas as pd
-import locale
 from PyQt5 import uic
 from PyQt5.QtWidgets import QDialog, QCheckBox, QRadioButton, QLineEdit
 from PyQt5.QtCore import pyqtSlot
@@ -17,7 +16,6 @@ class LoadDataDialog(QDialog):
     def load_data(self):
         first_row_checkbox = self.findChild(QCheckBox, "firstRowCheckbox")
         regular_radio_button = self.findChild(QRadioButton, "regularRadioButton")
-        comma_checkbox = self.findChild(QCheckBox, "commaCheckbox")
 
         if first_row_checkbox.isChecked():
             header = "infer"
@@ -40,14 +38,15 @@ class LoadDataDialog(QDialog):
             column_names = ['kolumna' + str(i) for i in rng]
             self.data.columns = column_names[:column_number]
 
-        if comma_checkbox.isChecked():
-            locale.setlocale(locale.LC_NUMERIC, '')
-            self.data = self.data.applymap(self.convert_if_float)
+        self.data = self.data.applymap(self.remove_commas)
 
-    def convert_if_float(self, value):
-        try:
-            return locale.atof(value)
-        except ValueError:
+    def remove_commas(self, value):
+        if type(value) == str:
+            try:
+                return float(value.replace(',', '.'))
+            except ValueError:
+                return value
+        else:
             return value
 
     @pyqtSlot()
