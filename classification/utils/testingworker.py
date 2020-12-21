@@ -1,14 +1,14 @@
 from PyQt5.QtCore import pyqtSlot, pyqtSignal, QObject, QRunnable
 
 class TestingWorker(QRunnable):
-    def __init__(self, tester, classifier, params):
+    def __init__(self, tester, classifier, params=None):
         super().__init__()
         self.tester = tester
         self.tester.set_progress_callback(self.progress_callback)
         self.tester.set_status_callback(self.status_callback)
         self.classifier = classifier
         self.signals = TestingWorker.TestingSignals()
-        self.params = params
+        self.params = params if params is not None else [None]
 
     @pyqtSlot()
     def run(self):

@@ -28,11 +28,18 @@ class Classifier(ABC):
     def get_name(self):
         pass
 
+    @abstractmethod
+    def build(self):
+        pass
+
+    def prepare_for_testing(self):
+        pass
+
     def set_parameter(self, parameter):
         pass
 
-    def prepare(self):
+    def get_classifier_output_data(self):
         pass
 
-    def get_classifier_output_data(self):
-        return None
+    def get_main_param(self):
+        pass

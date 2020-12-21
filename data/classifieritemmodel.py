@@ -1,21 +1,21 @@
 from PyQt5.QtCore import QAbstractItemModel, QModelIndex, Qt
 from PyQt5.QtWidgets import QAction
 
-from .classifiertreenode import ClassifierTreeNode
+from .classifieritemnode import ClassifierItemNode
 
-class ClassifierTreeModel(QAbstractItemModel):
+class ClassifierItemModel(QAbstractItemModel):
     def __init__(self, context):
         super().__init__()
         self.context = context
         self.classifiers = []
-        self.root = ClassifierTreeNode()
+        self.root = ClassifierItemNode()
 
     def add_classifier(self, classifier):
         self.classifiers.append(classifier)
-        node = ClassifierTreeNode(classifier.get_name())
+        node = ClassifierItemNode(classifier.get_name())
 
         action = QAction("Wyświetl model")
-        action.triggered.connect(lambda: self.context.show_classifier_table_output(classifier))
+        action.triggered.connect(lambda: self.context.show_classifier_output(classifier))
         node.add_action(action)
         action = QAction("Klasyfikuj nowy obiekt")
         action.triggered.connect(lambda: self.context.classify_new_object(classifier))
@@ -26,7 +26,7 @@ class ClassifierTreeModel(QAbstractItemModel):
 
         params = classifier.get_param_list()
         for param in params:
-            param_node = ClassifierTreeNode(param)
+            param_node = ClassifierItemNode(param)
             node.add_child(param_node)
         self.root.add_child(node)
 
@@ -36,7 +36,7 @@ class ClassifierTreeModel(QAbstractItemModel):
         return self.root.child_count()
 
     def index(self, row, column, parent=None):
-        if parent and parent.isValid():
+        if parent.isValid():
             p = parent.internalPointer()
         else:
             p = self.root

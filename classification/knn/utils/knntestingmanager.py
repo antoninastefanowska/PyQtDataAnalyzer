@@ -17,20 +17,6 @@ class KNNTestingManager(TestingManager):
     def __init__(self, context, data, class_column_name):
         super().__init__(context, data, class_column_name)
 
-    def run_single_test(self, k_value, metrics):
-        distances = PrecalculatedDistance(self.data, self.class_column_name, metrics)
-        classifier = KNNClassifier(self.data, self.class_column_name, distances)
-        tester = LeaveOneOutTester(self.data, self.class_column_name)
-
-        worker = TestingWorker(tester, classifier, [k_value])
-        worker.signals.result.connect(self.show_single_testing_result)
-        worker.signals.progress.connect(self.update_progress)
-        worker.signals.status.connect(self.update_status)
-
-        self.progress_window = ProgressWindow(self.context)
-        self.progress_window.show()
-        QThreadPool.globalInstance().start(worker)
-
     def run_parameter_testing(self):
         self.progress_window = ProgressWindow(self.context)
         self.progress_window.show()
@@ -38,7 +24,7 @@ class KNNTestingManager(TestingManager):
 
     def run_single_parameter_test(self, metrics_id):
         k_values = range(1, len(self.data.index) + 1)
-        metrics = MetricsFactory.get_by_id(metrics_id, self.data, self.class_column_name)
+        metrics = MetricsFactory.get_by_id(metrics_id, self.data)
 
         distances = PrecalculatedDistance(self.data, self.class_column_name, metrics)
         classifier = KNNClassifier(self.data, self.class_column_name, distances)

@@ -9,7 +9,7 @@ class HyperplaneClassifier(Classifier):
         self.hyperplanes = []
         self.removed_count = 0
 
-    def prepare(self):
+    def build(self):
         column_names = self.data.columns[self.data.columns != self.class_column_name]
         current_data = self.data
         while True:
@@ -39,6 +39,10 @@ class HyperplaneClassifier(Classifier):
             self.hyperplanes.append(max_hyperplane)
             self.removed_count += max_removed
             current_data = current_data.drop([row.name for row in max_separated_data])
+
+    def update_data(self, data):
+        super().update_data(data)
+        self.build()
 
     def separate_data(self, data, column_name):
         old_class_value = None

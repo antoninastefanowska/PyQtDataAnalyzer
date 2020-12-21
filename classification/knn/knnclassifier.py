@@ -6,7 +6,10 @@ class KNNClassifier(Classifier):
         self.metrics = metrics
         self.k = k
 
-    def prepare(self):
+    def prepare_for_testing(self):
+        self.metrics.prepare()
+
+    def build(self):
         self.metrics.prepare()
 
     def set_parameter(self, parameter):
@@ -68,3 +71,5 @@ class KNNClassifier(Classifier):
 
         return winner
 
+    def get_main_param(self):
+        return [self.k]

@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QMenu
 
-class ClassifierTreeNode:
+class ClassifierItemNode:
     def __init__(self, data=None):
         self.children = []
         self.data = data

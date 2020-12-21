@@ -41,7 +41,7 @@ class ClusterAnalysisDialog(QDialog):
 
         data_part = self.data.loc[:, start_column_name:end_column_name]
         metrics = MetricsFactory.get_by_name(metrics_name, data_part)
-        metrics.prepare()
+        metrics.prepare_for_testing()
 
         if chosen_value_radiobutton.isChecked():
             k_value_textbox = self.findChild(QLineEdit, "kValueTextbox")

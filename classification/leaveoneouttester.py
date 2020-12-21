@@ -29,4 +29,4 @@ class LeaveOneOutTester(ClassifierTester):
 
     def prepare(self, classifier):
         self.status_callback("Przygotowywanie...")
-        classifier.prepare()
+        classifier.prepare_for_testing()

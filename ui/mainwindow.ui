@@ -78,10 +78,11 @@
     </property>
     <widget class="QMenu" name="menuTestuj_klasyfikacj">
      <property name="title">
-      <string>Testuj klasyfikację</string>
+      <string>Testuj klasyfikator</string>
      </property>
-     <addaction name="actionTestKNNMethod"/>
-     <addaction name="actionTestHyperplanesMethod"/>
+     <addaction name="actionTestKNNClassifier"/>
+     <addaction name="actionTestHyperplaneClassifier"/>
+     <addaction name="actionTestDecisionTreeClassifier"/>
     </widget>
     <widget class="QMenu" name="menuTestuj_wp_yw_parametr_w">
      <property name="title">
@@ -95,6 +96,7 @@
      </property>
      <addaction name="actionCreateKNNClassifier"/>
      <addaction name="actionCreateHyperplaneClassifier"/>
+     <addaction name="actionCreateDecisionTreeClassifier"/>
     </widget>
     <addaction name="menuUtw_rz_klasyfikator"/>
     <addaction name="menuTestuj_klasyfikacj"/>
@@ -169,7 +171,7 @@
     <string>Testowanie klasyfikacji</string>
    </property>
   </action>
-  <action name="actionTestKNNMethod">
+  <action name="actionTestKNNClassifier">
    <property name="text">
     <string>KNN</string>
    </property>
@@ -194,7 +196,7 @@
     <string>Hiperpłaszczyzny</string>
    </property>
   </action>
-  <action name="actionTestHyperplanesMethod">
+  <action name="actionTestHyperplaneClassifier">
    <property name="text">
     <string>Hiperpłaszczyzny</string>
    </property>
@@ -217,6 +219,16 @@
   <action name="actionCreateHyperplaneClassifier">
    <property name="text">
     <string>Hiperpłaszczyzny</string>
+   </property>
+  </action>
+  <action name="actionCreateDecisionTreeClassifier">
+   <property name="text">
+    <string>Drzewo decyzyjne</string>
+   </property>
+  </action>
+  <action name="actionTestDecisionTreeClassifier">
+   <property name="text">
+    <string>Drzewo decyzyjne</string>
    </property>
   </action>
  </widget>
@@ -383,10 +395,10 @@
    </hints>
   </connection>
   <connection>
-   <sender>actionTestKNNMethod</sender>
+   <sender>actionTestKNNClassifier</sender>
    <signal>triggered()</signal>
    <receiver>MainWindow</receiver>
-   <slot>test_knn_method()</slot>
+   <slot>test_knn_classifier()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
@@ -451,22 +463,6 @@
    <signal>triggered()</signal>
    <receiver>MainWindow</receiver>
    <slot>show_chart2d_hyperplanes()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>399</x>
-     <y>299</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>actionTestHyperplanesMethod</sender>
-   <signal>triggered()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>test_hyperplane_method()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
@@ -547,6 +543,38 @@
    <signal>triggered()</signal>
    <receiver>MainWindow</receiver>
    <slot>create_hyperplane_classifier()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionCreateDecisionTreeClassifier</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>create_decision_tree_classifier()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionTestDecisionTreeClassifier</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>test_decision_tree_classifier()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>

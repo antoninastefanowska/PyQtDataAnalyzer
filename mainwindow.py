@@ -4,6 +4,7 @@ from PyQt5.QtCore import pyqtSlot, QPoint
 
 from data.tablemodel import TableModel
 from data.loaddatadialog import LoadDataDialog
+from metrics.precalculateddistance import PrecalculatedDistance
 
 from preprocessing.gui.texttonumberdialog import TextToNumberDialog
 from preprocessing.gui.discretizedialog import DiscretizeDialog
@@ -23,20 +24,25 @@ from visualization.gui.histogramdialog import HistogramDialog
 from visualization.gui.chartwindow import ChartWindow
 from visualization.chartcanvas import ChartCanvas
 
+from classification.leaveoneouttester import LeaveOneOutTester
+from classification.utils.testingmanager import TestingManager
+
 from classification.knn.knnclassifier import KNNClassifier
 from classification.knn.gui.knnclassifierdialog import KNNClassifierDialog
 from classification.knn.utils.knntestingmanager import KNNTestingManager
 
 from classification.hyperplane.hyperplaneclassifier import HyperplaneClassifier
-from classification.hyperplane.utils.hyperplanetestingmanager import HyperplaneTestingManager
+
+from classification.decisiontree.decisiontreeclassifier import DecisionTreeClassifier
+from classification.decisiontree.gui.classifiertreeoutputwindow import ClassifierTreeOutputWindow
 
 from classification.gui.newobjectdialog import NewObjectDialog
 from classification.gui.classificationresultwindow import ClassificationResultWindow
-from classification.gui.classifiertableoutputwindow import ClassifierTableOutputWindow
+from classification.hyperplane.gui.classifiertableoutputwindow import ClassifierTableOutputWindow
 
 from preprocessing.gui.clusteranalysisdialog import ClusterAnalysisDialog
 
-from data.classifiertreemodel import ClassifierTreeModel
+from data.classifieritemmodel import ClassifierItemModel
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -45,7 +51,7 @@ class MainWindow(QMainWindow):
         self.table_model = None
         self.testing_manager = None
 
-        self.classifier_tree_model = ClassifierTreeModel(self)
+        self.classifier_tree_model = ClassifierItemModel(self)
 
         self.load_ui()
 
@@ -162,6 +168,12 @@ class MainWindow(QMainWindow):
             chart_window = ChartWindow(self, chart_canvas)
             chart_window.show()
 
+    def add_classifier(self, classifier):
+        self.classifier_tree_model.add_classifier(classifier)
+        self.classifier_tree_model.layoutChanged.emit()
+        classifier_tree_view = self.findChild(QTreeView, "classifierTreeView")
+        classifier_tree_view.setColumnWidth(0, 200)
+
     @pyqtSlot()
     def create_knn_classifier(self):
         dialog = KNNClassifierDialog(self, self.data)
@@ -170,11 +182,8 @@ class MainWindow(QMainWindow):
             metrics = dialog.metrics
             k_value = dialog.k_value
             classifier = KNNClassifier(self.data, class_column_name, metrics, k_value)
-            classifier.prepare()
-            self.classifier_tree_model.add_classifier(classifier)
-            self.classifier_tree_model.layoutChanged.emit()
-            classifier_tree_view = self.findChild(QTreeView, "classifierTreeView")
-            classifier_tree_view.setColumnWidth(0, 200)
+            classifier.build()
+            self.add_classifier(classifier)
 
     @pyqtSlot()
     def create_hyperplane_classifier(self):
@@ -182,33 +191,43 @@ class MainWindow(QMainWindow):
         if dialog.exec_():
             class_column_name = dialog.class_column_name
             classifier = HyperplaneClassifier(self.data, class_column_name)
-            classifier.prepare()
-            self.classifier_tree_model.add_classifier(classifier)
-            self.classifier_tree_model.layoutChanged.emit()
-            classifier_tree_view = self.findChild(QTreeView, "classifierTreeView")
-            classifier_tree_view.setColumnWidth(0, 200)
+            classifier.build()
+            self.add_classifier(classifier)
 
-    def show_classifier_table_output(self, classifier):
-        window = ClassifierTableOutputWindow(self, classifier.get_classifier_output_data())
-        window.show()
-        if classifier.get_name() == "Hiperpłaszczyzny" and len(self.data.columns) == 3:
-            no_class_data = self.data.drop(classifier.class_column_name, axis=1)
-            x_column_name = no_class_data.columns[0]
-            y_column_name = no_class_data.columns[1]
+    @pyqtSlot()
+    def create_decision_tree_classifier(self):
+        dialog = ClassColumnDialog(self, self.data)
+        if dialog.exec_():
+            class_column_name = dialog.class_column_name
+            classifier = DecisionTreeClassifier(self.data, class_column_name)
+            classifier.build()
+            self.add_classifier(classifier)
 
-            x_min = no_class_data[x_column_name].min()
-            x_max = no_class_data[x_column_name].max()
-            y_min = no_class_data[y_column_name].min()
-            y_max = no_class_data[y_column_name].max()
+    def show_classifier_output(self, classifier):
+        if isinstance(classifier, DecisionTreeClassifier):
+            window = ClassifierTreeOutputWindow(self, classifier.get_classifier_output_data())
+            window.show()
+        elif isinstance(classifier, HyperplaneClassifier):
+            window = ClassifierTableOutputWindow(self, classifier.get_classifier_output_data())
+            window.show()
+            if len(self.data.columns) == 3:
+                no_class_data = self.data.drop(classifier.class_column_name, axis=1)
+                x_column_name = no_class_data.columns[0]
+                y_column_name = no_class_data.columns[1]
 
-            xlims = (x_min, x_max)
-            ylims = (y_min, y_max)
-            hyperplanes = [hyperplane for hyperplane in classifier.hyperplanes]
+                x_min = no_class_data[x_column_name].min()
+                x_max = no_class_data[x_column_name].max()
+                y_min = no_class_data[y_column_name].min()
+                y_max = no_class_data[y_column_name].max()
 
-            chart_canvas = ChartCanvas(subplots=1)
-            chart_canvas.generate_2d_chart(self.data, classifier.class_column_name, x_column_name, y_column_name)
-            chart_window = ChartWindow(self, chart_canvas, hyperplanes, xlims, ylims)
-            chart_window.show()
+                xlims = (x_min, x_max)
+                ylims = (y_min, y_max)
+                hyperplanes = [hyperplane for hyperplane in classifier.hyperplanes]
+
+                chart_canvas = ChartCanvas(subplots=1)
+                chart_canvas.generate_2d_chart(self.data, classifier.class_column_name, x_column_name, y_column_name)
+                chart_window = ChartWindow(self, chart_canvas, hyperplanes, xlims, ylims)
+                chart_window.show()
 
     def classify_new_object(self, classifier):
         dialog = ClassColumnDialog(self, self.data)
@@ -238,7 +257,7 @@ class MainWindow(QMainWindow):
                     result_window.show()
 
     @pyqtSlot()
-    def test_knn_method(self):
+    def test_knn_classifier(self):
         dialog = KNNClassifierDialog(self, self.data)
         if dialog.exec_():
             class_column_name = dialog.class_column_name
@@ -246,16 +265,33 @@ class MainWindow(QMainWindow):
             k_value = dialog.k_value
 
             self.testing_manager = KNNTestingManager(self, self.data, class_column_name)
-            self.testing_manager.run_single_test(k_value, metrics)
+            distances = PrecalculatedDistance(self.data, class_column_name, metrics)
+            classifier = KNNClassifier(self.data, class_column_name, distances, k_value)
+            tester = LeaveOneOutTester(self.data, class_column_name)
+
+            self.testing_manager.run_single_test(tester, classifier)
 
     @pyqtSlot()
-    def test_hyperplane_method(self):
+    def test_hyperplane_classifier(self):
         dialog = ClassColumnDialog(self, self.data)
         if dialog.exec_():
             class_column_name = dialog.class_column_name
 
-            self.testing_manager = HyperplaneTestingManager(self, self.data, class_column_name)
-            self.testing_manager.run_single_test()
+            self.testing_manager = TestingManager(self, self.data, class_column_name)
+            classifier = HyperplaneClassifier(self.data, class_column_name)
+            tester = LeaveOneOutTester(self.data, class_column_name)
+            self.testing_manager.run_single_test(tester, classifier)
+
+    @pyqtSlot()
+    def test_decision_tree_classifier(self):
+        dialog = ClassColumnDialog(self, self.data)
+        if dialog.exec_():
+            class_column_name = dialog.class_column_name
+
+            self.testing_manager = TestingManager(self, self.data, class_column_name)
+            classifier = DecisionTreeClassifier(self.data, class_column_name)
+            tester = LeaveOneOutTester(self.data, class_column_name)
+            self.testing_manager.run_single_test(tester, classifier)
 
     @pyqtSlot()
     def test_knn_parameters(self):

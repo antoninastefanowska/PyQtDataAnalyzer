@@ -5,8 +5,8 @@
 
         "data/tablemodel.py",
         "data/loaddatadialog.py",
-        "data/classifiertreemodel.py",
-        "data/classifiertreenode.py",
+        "data/classifieritemmodel.py",
+        "data/classifieritemnode.py",
 
         "preprocessing/columnprocessor.py",
         "preprocessing/kmeansclustering.py",
@@ -58,11 +58,15 @@
 
         "classification/hyperplane/hyperplaneclassifier.py",
         "classification/hyperplane/vector.py",
-        "classification/hyperplane/utils/hyperplanetestingmanager.py",
+        "classification/hyperplane/gui/classifiertableoutputwindow.py",
+
+        "classification/decisiontree/decisiontreeclassifier.py",
+        "classification/decisiontree/treenode.py",
+        "classification/decisiontree/utils/decisiontreeitemmodel.py",
+        "classification/decisiontree/gui/classifiertreeoutputwindow.py",
 
         "classification/gui/newobjectdialog.py",
         "classification/gui/classificationresultwindow.py",
-        "classification/gui/classifiertableoutputwindow.py",
         "classification/gui/testingresultwindow.py",
         "classification/gui/progresswindow.py",
 
@@ -81,7 +85,8 @@
         "ui/newobjectdialog.ui",
         "ui/knnclassifierdialog.ui",
         "ui/classificationresultwindow.ui",
-        "ui/classifiertableoutputwindow.ui"
+        "ui/classifiertableoutputwindow.ui",
+        "ui/classifiertreeoutputwindow.ui",
         "ui/testingresultwindow.ui",
         "ui/progresswindow.ui",
         "ui/clusteranalysisdialog.ui",

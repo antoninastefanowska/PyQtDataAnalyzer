@@ -12,7 +12,7 @@ class Chart2DHyperplanesDialog(Chart2DDialog):
         super().generate_chart()
         data2d = self.data[[self.x_column_name, self.y_column_name, self.class_column_name]]
         hyperplane_classifier = HyperplaneClassifier(data2d, self.class_column_name)
-        hyperplane_classifier.prepare()
+        hyperplane_classifier.build()
 
         x_min = data2d[self.x_column_name].min()
         x_max = data2d[self.x_column_name].max()
