@@ -19,8 +19,8 @@ class DecisionTreeClassifier(Classifier):
             entropy -= probability * math.log2(probability)
         return entropy
 
-    def find_attribute(self, data, parent_entropy):
-        max_gain = -1
+    def find_attribute(self, data):
+        min_entropy = -1
         best_attribute = None
         for column_name in data.columns:
             if column_name != self.class_column_name:
@@ -31,9 +31,8 @@ class DecisionTreeClassifier(Classifier):
                     probability = len(data_part) / len(data)
                     class_entropy = self.entropy(data_part)
                     entropy += probability * class_entropy
-                gain = parent_entropy - entropy
-                if gain > max_gain:
-                    max_gain = gain
+                if entropy < min_entropy or min_entropy == -1:
+                    min_entropy = entropy
                     best_attribute = column_name
         return best_attribute
 
@@ -45,7 +44,7 @@ class DecisionTreeClassifier(Classifier):
             return TreeNode(test_value=test_value, class_value=class_value, node_size=len(data))
 
         else:
-            attribute = self.find_attribute(data, entropy)
+            attribute = self.find_attribute(data)
             class_value = data[self.class_column_name].mode().iloc[0]
             if attribute is None:
                 return TreeNode(test_value=test_value, class_value=class_value, node_size=len(data))
@@ -63,19 +62,19 @@ class DecisionTreeClassifier(Classifier):
         homogenous = True
         for child in tree.children:
             self.prune(child)
-            if not child.children:
+            if child.is_leaf():
                 if class_value is None:
                     class_value = child.class_value
                 elif class_value != child.class_value:
                     homogenous = False
             else:
                 homogenous = False
-        if tree.children and homogenous:
+        if not tree.is_leaf() and homogenous:
             self.node_count -= tree.child_count()
             tree.turn_to_leaf(class_value)
 
     def build(self):
-        self.tree = self.build_node(self.data.copy(), None)
+        self.tree = self.build_node(self.data, None)
         self.prune(self.tree)
 
     def update_data(self, data):

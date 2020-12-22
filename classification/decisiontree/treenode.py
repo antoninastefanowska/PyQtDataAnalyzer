@@ -11,6 +11,9 @@ class TreeNode:
     def parent_size(self):
         return self.parent.node_size if self.parent else self.node_size
 
+    def is_leaf(self):
+        return not self.children
+
     def add_child(self, child):
         child.parent = self
         child.index = len(self.children)
@@ -42,7 +45,7 @@ class TreeNode:
     def label(self):
         if self.parent:
             s = self.parent.column_name + " = " + str(self.test_value)
-            if not self.children:
+            if self.is_leaf():
                 s += " : " + self.class_value
             s += " (" + str(self.node_size) + "/" + str(self.parent_size()) + ")"
             return s
